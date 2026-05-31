@@ -97,7 +97,7 @@ with st.sidebar:
     )
 
 # --- [4] 메인 화면 대시보드 ---
-st.title(" 프리미엄 최저보증 변액종신연금 컨설턴트 ")
+st.title(" 프리미엄 최저보증 변액종신연금 시뮬레이터 ")
 st.markdown("---")
 
 t_prin, t_int, t_bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
@@ -116,7 +116,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 # 2. 첫 번째 차트: 예상 연금 준비금 구성 (파이 차트)
 # ? 변경점: 제목 앞에 '1. ' 넘버링 추가
-st.subheader("1. ?? 예상 연금 준비금 구성 비율")
+st.subheader("1.예상 연금 준비금 구성 비율")
 st.caption("고객님이 납입한 원금이 시간과 보너스를 통해 어떻게 성장했는지 직관적으로 보여줍니다.")
 df_pie = pd.DataFrame({
     "항목": ["순수 납입 원금", "누적 적립 이자", "장기유지 가산보너스"],
