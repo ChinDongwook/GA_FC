@@ -13,13 +13,7 @@ import pandas as pd
 import plotly.express as px
 import datetime
 
-st.markdown("""
-    <style>
-    .stCaption {
-        font-size: 18px !important;
-    }
-    </style>
-    """, unsafe_allow_html=True)
+
  
 
 # --- [1] 페이지 기본 설정 ---
