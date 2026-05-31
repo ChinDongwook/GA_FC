@@ -167,7 +167,44 @@ st.plotly_chart(fig_bar, use_container_width=True)
 
 st.markdown("---")
 
-# 4. 세 번째 차트: 생존 연령별 누계액 (영역 차트)
+# 4. 세 번째 차트: 생존 연령별 연금 누계액 및 원금 대비 수익 시각화
+
+st.subheader(f"3. 생존 연령별 연금 누계액 및 원금 회수 시점 ({target_r_age}세 개시 기준)")
+st.caption("파란색 영역은 총 수령액이며, 빨간 점선은 고객님이 납입하신 '총 원금'입니다.")
+
+survival_ages = list(range(80, 131))
+cumulative_data = []
+
+for s_age in survival_ages:
+    received_years = max(0, s_age - target_r_age + 1)
+    acc_pension = ann_pen * received_years
+    cumulative_data.append({
+        "생존 나이": s_age,
+        "누계 수령액": acc_pension,
+        "납입 원금": t_prin # 영역 차트의 기준선으로 활용
+    })
+
+df_cum = pd.DataFrame(cumulative_data)
+
+# 영역 차트 생성
+fig_cum = px.area(df_cum, x="생존 나이", y=["누계 수령액", "납입 원금"],
+                  labels={"value": "금액 (만원)", "생존 나이": "생존 연령 (세)", "variable": "항목"},
+                  color_discrete_map={"누계 수령액": "#2E86C1", "납입 원금": "#E74C3C"})
+
+# 시각적 가독성 설정 (5년 단위 눈금 적용)
+fig_cum.update_layout(
+    xaxis=dict(tickmode='linear', dtick=5, title="생존 연령 (세)"),
+    yaxis=dict(title="금액 (만원)"),
+    hovermode="x unified",
+    legend_title_text="비교 항목"
+)
+
+# 차트 투명도 조정으로 원금과 수익 영역을 겹쳐서 확인
+fig_cum.update_traces(opacity=0.6)
+
+st.plotly_chart(fig_cum, use_container_width=True)
+
+"""
 # ? 변경점: 제목 앞에 '3. ' 넘버링 추가
 st.subheader(f"3. 생존 연령별 연금 누계액 및 총 수익률 ({target_r_age}세 개시 기준)")
 st.caption("80세부터 130세까지 생존 시 수령하는 총 누계액과 납입 원금 대비 수익률입니다.")
@@ -194,4 +231,5 @@ fig_cum = px.area(df_cum, x="생존 나이", y="누계 수령액 (만원)",
 fig_cum.update_traces(hovertemplate='<b>생존 나이: %{x}세</b><br>총 누계 수령액: %{y:,.0f} 만원<br>총 수익률: %{customdata:,.0f}%',
                       customdata=df_cum['총 수익률 (%)'])
 fig_cum.update_layout(hovermode="x unified")
+"""
 st.plotly_chart(fig_cum, use_container_width=True)
