@@ -149,7 +149,7 @@ st.markdown("---")
 
 # 3. 두 번째 차트: 1년 단위 비교 (바 차트)
 # ? 변경점: 제목 앞에 '2. ' 넘버링 추가
-st.subheader("2. 연금 개시별 연령별 수령액 비교")
+st.subheader("2. 연금 개시 연령별 수령액 비교")
 st.caption("은퇴 시기를 1년 늦출 때마다 연금 수령액이 얼마나 극적으로 상승하는지 확인하세요.")
 start_age, end_age = compare_range
 compare_ages = list(range(start_age, end_age + 1))
