@@ -50,7 +50,7 @@ with tab1:
 
 with tab2:
     st.header("프리미엄 연금 시뮬레이터")
-    # 시뮬레이터 입력부
+    chindongwook-ga-fc-pansion-simulation-app-yr83kb
     with st.sidebar:
         st.title("⚙️ 시뮬레이션 설정")
         gender = st.selectbox("성별", ["남", "여"], index=1)
