@@ -169,7 +169,7 @@ st.markdown("---")
 
 # 4. 세 번째 차트: 생존 연령별 연금 누계액 및 원금 대비 수익 시각화
 
-st.subheader(f"3. 생존 연령별 연금 누계액 및 원금 회수 시점 ({target_r_age}세 개시 기준)")
+st.subheader(f"3. 생존 연령별 연금 누계액 및 납입원금 ({target_r_age}세 개시 기준)")
 st.caption("붉은색 영역은 납입하신 원금이며, 파란색 영역은 원금 위로 쌓이는 연금 수익의 총액입니다.")
 
 survival_ages = list(range(80, 131))
