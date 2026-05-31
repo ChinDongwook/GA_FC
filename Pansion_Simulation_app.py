@@ -13,6 +13,34 @@ import pandas as pd
 import plotly.express as px
 import datetime
 
+from fpdf import FPDF
+import io
+
+# PDF 생성 함수
+def create_pdf(current_age, final_reserve, monthly_pension):
+    pdf = FPDF()
+    pdf.add_page()
+    pdf.set_font("Arial", 'B', 16)
+    pdf.cell(200, 10, txt="Pension Simulation Report", ln=True, align='C')
+    pdf.set_font("Arial", size=12)
+    pdf.cell(200, 10, txt=f"Current Age: {current_age}", ln=True)
+    pdf.cell(200, 10, txt=f"Final Reserve: {final_reserve:,.0f} KRW", ln=True)
+    pdf.cell(200, 10, txt=f"Expected Monthly Pension: {monthly_pension:,.0f} KRW", ln=True)
+    
+    # 메모리상에서 PDF 생성
+    pdf_output = io.BytesIO()
+    pdf_output.write(pdf.output(dest='S').encode('latin-1'))
+    return pdf_output
+
+# 시뮬레이션 결과 화면 하단에 버튼 추가
+if st.button("📄 문서로 저장하기"):
+    pdf_data = create_pdf(current_age, f_res, (ann_pen/12))
+    st.download_button(
+        label="PDF 다운로드",
+        data=pdf_data,
+        file_name="pension_report.pdf",
+        mime="application/pdf"
+    )
 
  
 
