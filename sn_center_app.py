@@ -1,6 +1,16 @@
 import streamlit as st
 import Pansion_Simulation_app
 
+# 코드 최상단에 추가
+st.markdown("""
+    <style>
+    /* 메인 폰트와 배경색을 더 고급스럽게 */
+    .main { background-color: #f5f7f9; }
+    h1 { color: #003366 !important; font-weight: 700 !important; }
+    .stMetric { background-color: #ffffff; padding: 20px; border-radius: 10px; border: 1px solid #e0e0e0; }
+    </style>
+""", unsafe_allow_html=True)
+
 st.set_page_config(page_title="더블유에셋 성남센터", layout="wide")
 
 st.title("🏢 더블유에셋 성남센터")
