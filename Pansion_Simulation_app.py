@@ -170,9 +170,9 @@ st.markdown("---")
 # 4. 세 번째 차트: 생존 연령별 누계액 (영역 차트)
 # ? 변경점: 제목 앞에 '3. ' 넘버링 추가
 st.subheader(f"3. 생존 연령별 연금 누계액 및 총 수익률 ({target_r_age}세 개시 기준)")
-st.caption("90세부터 130세까지 생존 시 수령하는 총 누계액과 납입 원금 대비 수익률입니다.")
+st.caption("80세부터 130세까지 생존 시 수령하는 총 누계액과 납입 원금 대비 수익률입니다.")
 
-survival_ages = list(range(90, 131))
+survival_ages = list(range(80, 131))
 cumulative_data = []
 
 for s_age in survival_ages:
