@@ -61,10 +61,10 @@ def calculate_details(current_age, gender, monthly_pay, p_years, r_age):
 
 # --- [3] 사이드바 (입력부) ---
 with st.sidebar:
-    st.title("?? 고객 정보 입력")
+    st.title("고객 정보 입력")
     gender = st.selectbox("▶ 성별", ["남", "여"], index=1)
     
-    st.markdown("**▶ 생년월일 입력**")
+    st.markdown("**▶ 생년 월 입력**")
     col1, col2 = st.columns(2)
     today = datetime.date.today()
     
@@ -77,13 +77,13 @@ with st.sidebar:
     if today.month < birth_month:
         current_age -= 1
         
-    st.success(f"?? 고객님의 현재 나이는 **만 {current_age}세** 입니다.")
+    st.success(f"고객님의 현재 나이는 **만 {current_age}세** 입니다.")
     
     monthly_pay = st.number_input("▶ 월 납입 금액 (만원)", min_value=10, max_value=500, value=50, step=10)
     pay_years = st.selectbox("▶ 납입 기간 (년)", [5, 7, 10, 12, 15, 20, 25], index=2)
     
     min_retire_age = current_age + pay_years + 5
-    st.info(f"?? 최소 연금개시 가능 나이는 **{min_retire_age}세** 입니다.")
+    st.info(f" 최소 연금개시 가능 나이는 **{min_retire_age}세** 입니다.")
     
     target_r_age = st.slider("▶ 상세 분석할 연금 개시 나이", min_value=min_retire_age, max_value=90, value=max(65, min_retire_age))
 
@@ -116,7 +116,7 @@ st.markdown("<br>", unsafe_allow_html=True)
 
 # 2. 첫 번째 차트: 예상 연금 준비금 구성 (파이 차트)
 # ? 변경점: 제목 앞에 '1. ' 넘버링 추가
-st.subheader("1.예상 연금 준비금 구성 비율")
+st.subheader("1. 예상 연금 준비금 구성 비율")
 st.caption("고객님이 납입한 원금이 시간과 보너스를 통해 어떻게 성장했는지 직관적으로 보여줍니다.")
 df_pie = pd.DataFrame({
     "항목": ["순수 납입 원금", "누적 적립 이자", "장기유지 가산보너스"],
