@@ -3,10 +3,10 @@ import pandas as pd
 import plotly.express as px
 import datetime
 
-# --- [1] 페이지 기본 설정 ---
+# --- [1] 페이지 설정 ---
 st.set_page_config(page_title="더블유에셋 성남센터", layout="wide")
 
-# --- [2] 계산 로직 함수 ---
+# --- [2] 핵심 계산 로직 (기존과 동일) ---
 def calculate_details(current_age, gender, monthly_pay, p_years, r_age):
     passed = r_age - current_age
     if passed >= 30: bonus = 0.24
@@ -34,29 +34,33 @@ def calculate_details(current_age, gender, monthly_pay, p_years, r_age):
     annual_pension = final_reserve * p_rate
     return total_prin, total_interest, bonus_amount, final_reserve, annual_pension
 
-# --- [3] 메인 레이아웃 (탭 구성) ---
+# --- [3] 통합 포털 레이아웃 ---
 st.title("🏢 더블유에셋 성남센터")
-tab1, tab2 = st.tabs(["센터 소개", "연금 시뮬레이터"])
+tab1, tab2 = st.tabs(["1. 센터 소개", "2. 연금 시뮬레이터"])
 
 with tab1:
     st.header("성남센터에 오신 것을 환영합니다")
-    st.write("더블유에셋 성남센터는 고객의 성공적인 자산 관리와 안정적인 노후를 위해 최선을 다합니다.")
+    st.markdown("더블유에셋 성남센터는 고객의 성공적인 자산 관리와 안정적인 노후를 위해 전문적인 금융 컨설팅을 제공합니다.")
     st.divider()
-    st.subheader("우리의 약속")
-    st.info("데이터에 기반한 철저한 재무 컨설팅을 제공합니다.")
+    st.subheader("우리의 전문 분야")
+    st.write("- 맞춤형 은퇴 설계 및 연금 플랜")
+    st.write("- 세금 절감 및 절세 전략 컨설팅")
+    st.write("- 1인 GA 및 97지사 창업 지원")
+    st.info("상담이 필요하시면 언제든 센터로 문의해 주세요.")
 
 with tab2:
     st.header("프리미엄 연금 시뮬레이터")
-    # 시뮬레이터 로직
+    # 시뮬레이터 입력부
     with st.sidebar:
-        st.title("⚙️ 입력부")
+        st.title("⚙️ 시뮬레이션 설정")
         gender = st.selectbox("성별", ["남", "여"], index=1)
         birth_year = st.number_input("출생 연도", 1940, 2024, 1994)
         current_age = datetime.date.today().year - birth_year
         monthly_pay = st.number_input("월 납입 금액 (만원)", 10, 500, 50, 10)
-        pay_years = st.selectbox("납입 기간 (년)", [5, 10, 15, 20, 25], index=2)
+        pay_years = st.selectbox("납입 기간 (년)", [5, 10, 15, 20, 25], index=1)
         target_r_age = st.slider("연금 개시 나이", current_age + pay_years + 5, 90, 65)
 
+    # 시뮬레이터 출력부
     t_prin, t_int, t_bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
     
     col1, col2, col3 = st.columns(3)
@@ -64,7 +68,7 @@ with tab2:
     col2.metric("최종 준비금", f"{f_res:,.0f} 만원")
     col3.metric("예상 월 수령액", f"{(ann_pen/12):,.0f} 만원")
     
-    st.subheader("1. 예상 연금 준비금 구성 비율")
+    st.subheader("연금 준비금 구성 비율")
     df_pie = pd.DataFrame({"항목": ["원금", "이자", "보너스"], "금액": [t_prin, t_int, t_bonus]})
     fig = px.pie(df_pie, values="금액", names="항목", hole=0.4)
     fig.update_traces(texttemplate='<b>%{label}</b><br>%{value:,.0f} 만원')
