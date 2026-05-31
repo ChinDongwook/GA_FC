@@ -208,33 +208,3 @@ fig_cum.update_layout(barmode='stack')
 
 st.plotly_chart(fig_cum, use_container_width=True)
 
-"""
-# ? 변경점: 제목 앞에 '3. ' 넘버링 추가
-st.subheader(f"3. 생존 연령별 연금 누계액 및 총 수익률 ({target_r_age}세 개시 기준)")
-st.caption("80세부터 130세까지 생존 시 수령하는 총 누계액과 납입 원금 대비 수익률입니다.")
-
-survival_ages = list(range(80, 131))
-cumulative_data = []
-
-for s_age in survival_ages:
-    received_years = max(0, s_age - target_r_age + 1)
-    acc_pension = ann_pen * received_years
-    roi = (acc_pension / t_prin) * 100 if t_prin > 0 else 0
-    cumulative_data.append({
-        "생존 나이": s_age,
-        "누계 수령액 (만원)": acc_pension,
-        "총 수익률 (%)": roi
-    })
-
-df_cum = pd.DataFrame(cumulative_data)
-
-fig_cum = px.area(df_cum, x="생존 나이", y="누계 수령액 (만원)",
-                  labels={"누계 수령액 (만원)": "총 누계 수령액 (만원)", "생존 나이": "생존 연령 (세)"},
-                  color_discrete_sequence=["#1f77b4"])
-
-fig_cum.update_traces(hovertemplate='<b>생존 나이: %{x}세</b><br>총 누계 수령액: %{y:,.0f} 만원<br>총 수익률: %{customdata:,.0f}%',
-                      customdata=df_cum['총 수익률 (%)'])
-fig_cum.update_layout(hovermode="x unified")
-
-st.plotly_chart(fig_cum, use_container_width=True)
-"""
