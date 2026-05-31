@@ -115,7 +115,7 @@ with st.sidebar:
     )
 
 # --- [4] 메인 화면 대시보드 ---
-st.title(" 프리미엄 최저보증 변액종신연금 시뮬레이터 ")
+st.title(" 최저보증 변액종신연금 시뮬레이터 ")
 st.markdown("---")
 
 t_prin, t_int, t_bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
