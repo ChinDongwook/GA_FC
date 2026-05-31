@@ -202,6 +202,7 @@ fig_cum.update_layout(
     legend_title_text="비교 항목"
 )
 
+"""
 # 스택(쌓기) 모드 적용
 fig_cum.update_layout(barmode='stack') 
 
