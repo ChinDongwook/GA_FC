@@ -17,31 +17,48 @@ from fpdf import FPDF
 import io
 
 # PDF 생성 함수
-def create_pdf(current_age, final_reserve, monthly_pension):
-    pdf = FPDF()
-    pdf.add_page()
-    pdf.set_font("Arial", 'B', 16)
-    pdf.cell(200, 10, txt="Pension Simulation Report", ln=True, align='C')
-    pdf.set_font("Arial", size=12)
-    pdf.cell(200, 10, txt=f"Current Age: {current_age}", ln=True)
-    pdf.cell(200, 10, txt=f"Final Reserve: {final_reserve:,.0f} KRW", ln=True)
-    pdf.cell(200, 10, txt=f"Expected Monthly Pension: {monthly_pension:,.0f} KRW", ln=True)
-    
-    # 메모리상에서 PDF 생성
-    pdf_output = io.BytesIO()
-    pdf_output.write(pdf.output(dest='S').encode('latin-1'))
-    return pdf_output
+from fpdf import FPDF
+import io
 
-# 시뮬레이션 결과 화면 하단에 버튼 추가
-if st.button("📄 문서로 저장하기"):
-    pdf_data = create_pdf(current_age, f_res, (ann_pen/12))
+# 1. 변수 저장 (앱이 새로고침되어도 값이 유지되도록 session_state 사용)
+if 'calc_results' not in st.session_state:
+    st.session_state.calc_results = None
+
+# ... (기존 계산 로직 하단에 이 부분을 넣으세요) ...
+
+# 계산된 결과를 세션에 저장
+if st.button("계산하기"):
+    t_prin, t_int, t_bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
+    st.session_state.calc_results = {
+        "current_age": current_age,
+        "f_res": f_res,
+        "ann_pen": ann_pen
+    }
+
+# 문서 생성 및 다운로드 로직
+if st.session_state.calc_results:
+    res = st.session_state.calc_results
+    
+    # PDF 생성 함수 내부를 조금 더 안정적으로 수정
+    def create_pdf(age, reserve, pension):
+        pdf = FPDF()
+        pdf.add_page()
+        pdf.set_font("Arial", 'B', 16)
+        pdf.cell(200, 10, txt="Pension Simulation Report", ln=True, align='C')
+        pdf.set_font("Arial", size=12)
+        pdf.cell(200, 10, txt=f"Current Age: {age}", ln=True)
+        pdf.cell(200, 10, txt=f"Final Reserve: {reserve:,.0f} KRW", ln=True)
+        pdf.cell(200, 10, txt=f"Expected Monthly Pension: {pension/12:,.0f} KRW", ln=True)
+        return pdf.output(dest='S').encode('latin-1')
+
+    pdf_bytes = create_pdf(res['current_age'], res['f_res'], res['ann_pen'])
+    
     st.download_button(
-        label="PDF 다운로드",
-        data=pdf_data,
+        label="📄 PDF 다운로드",
+        data=pdf_bytes,
         file_name="pension_report.pdf",
         mime="application/pdf"
     )
-
  
 
 # --- [1] 페이지 기본 설정 ---
