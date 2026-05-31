@@ -3,24 +3,24 @@ import pandas as pd
 import plotly.express as px
 import datetime
 
-# --- [1] 페이지 설정 및 스타일 ---
-st.set_page_config(page_title="더블유에셋 성남센터", page_icon="🏢", layout="wide")
+# --- [1] 페이지 기본 설정 ---
+st.set_page_config(page_title="더블유에셋 성남센터", layout="wide")
 
-# CSS를 활용한 세련된 탭 스타일링
-st.markdown("""
-    <style>
-    .stTabs [data-baseweb="tab-list"] { gap: 20px; }
-    .stTabs [data-baseweb="tab"] { font-size: 18px; font-weight: bold; }
-    </style>
-""", unsafe_allow_html=True)
-
-# --- [2] 계산 로직 ---
+# --- [2] 계산 로직 함수 ---
 def calculate_details(current_age, gender, monthly_pay, p_years, r_age):
     passed = r_age - current_age
-    bonus = 0.24 if passed >= 30 else (0.16 if passed >= 25 else (0.07 if passed >= 20 else 0))
-    p_rate = 0.040 if 55 <= r_age < 65 else 0.045
+    if passed >= 30: bonus = 0.24
+    elif passed >= 25: bonus = 0.16
+    elif passed >= 20: bonus = 0.07
+    else: bonus = 0
+    if 30 <= r_age < 40: p_rate = 0.022
+    elif 40 <= r_age < 50: p_rate = 0.026
+    elif 50 <= r_age < 55: p_rate = 0.0285
+    elif 55 <= r_age < 65: p_rate = 0.040
+    elif 65 <= r_age < 70: p_rate = 0.045
+    elif 70 <= r_age < 80: p_rate = 0.0485
+    else: p_rate = 0.050
     if gender == "남": p_rate += 0.002
-    
     total_prin = monthly_pay * 12 * p_years
     total_interest = 0
     for year in range(1, p_years + 1):
@@ -28,42 +28,44 @@ def calculate_details(current_age, gender, monthly_pay, p_years, r_age):
         y_8 = max(0, min(time_to_retire, 20 - year + 1))
         y_5 = max(0, time_to_retire - y_8)
         total_interest += (monthly_pay * 12) * (0.08 * y_8 + 0.05 * y_5)
-    
-    final_reserve = (total_prin + total_interest) * (1 + bonus)
-    return total_prin, total_interest, bonus, final_reserve, final_reserve * p_rate
+    base_reserve = total_prin + total_interest
+    bonus_amount = base_reserve * bonus
+    final_reserve = base_reserve + bonus_amount
+    annual_pension = final_reserve * p_rate
+    return total_prin, total_interest, bonus_amount, final_reserve, annual_pension
 
-# --- [3] 메인 화면 구성 ---
+# --- [3] 메인 레이아웃 (탭 구성) ---
 st.title("🏢 더블유에셋 성남센터")
-st.markdown("---")
-
-tab1, tab2, tab3 = st.tabs(["센터 소개", "금융 전문 칼럼", "연금 시뮬레이터"])
+tab1, tab2 = st.tabs(["센터 소개", "연금 시뮬레이터"])
 
 with tab1:
-    st.subheader("데이터에 기반한 프리미엄 재무 설계")
-    st.write("더블유에셋 성남센터는 고객님의 라이프사이클에 맞춘 체계적인 솔루션을 제공합니다.")
-    st.info("전문적인 상담을 통해 안정적인 미래를 준비하세요.")
+    st.header("성남센터에 오신 것을 환영합니다")
+    st.write("더블유에셋 성남센터는 고객의 성공적인 자산 관리와 안정적인 노후를 위해 최선을 다합니다.")
+    st.divider()
+    st.subheader("우리의 약속")
+    st.info("데이터에 기반한 철저한 재무 컨설팅을 제공합니다.")
 
 with tab2:
-    st.subheader("전문가 인사이트")
-    st.markdown("---")
-    with st.expander("💡 박곰희 노후준비: 계좌의 시스템화"):
-        st.write("퇴직연금과 ISA 계좌를 활용해 자동 투자 시스템을 구축하는 것이 장기 수익률의 핵심입니다.")
-    with st.expander("💰 ISA 계좌, 왜 필수인가?"):
-        st.write("1인 1계좌의 절세 혜택. 효율적인 자산 배분을 통해 세금을 최적화하세요.")
-
-with tab3:
     st.header("프리미엄 연금 시뮬레이터")
-    st.write("고객님의 노후 자산을 지금 바로 설계해보세요.")
+    # 시뮬레이터 로직
+    with st.sidebar:
+        st.title("⚙️ 입력부")
+        gender = st.selectbox("성별", ["남", "여"], index=1)
+        birth_year = st.number_input("출생 연도", 1940, 2024, 1994)
+        current_age = datetime.date.today().year - birth_year
+        monthly_pay = st.number_input("월 납입 금액 (만원)", 10, 500, 50, 10)
+        pay_years = st.selectbox("납입 기간 (년)", [5, 10, 15, 20, 25], index=2)
+        target_r_age = st.slider("연금 개시 나이", current_age + pay_years + 5, 90, 65)
+
+    t_prin, t_int, t_bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
     
-    # URL 주소 설정 (공유해주신 링크)
-    sim_url = "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/"
+    col1, col2, col3 = st.columns(3)
+    col1.metric("총 납입 원금", f"{t_prin:,.0f} 만원")
+    col2.metric("최종 준비금", f"{f_res:,.0f} 만원")
+    col3.metric("예상 월 수령액", f"{(ann_pen/12):,.0f} 만원")
     
-    # 현재 창에서 이동하는 세련된 버튼 스타일
-    st.markdown(f"""
-        <div style="text-align: center; padding: 20px;">
-            <a href="{sim_url}" target="_self" 
-               style="background-color: #003366; color: white; padding: 20px 40px; text-decoration: none; border-radius: 10px; font-size: 22px; font-weight: bold;">
-               🚀 시뮬레이터 바로가기
-            </a>
-        </div>
-    """, unsafe_allow_html=True)
+    st.subheader("1. 예상 연금 준비금 구성 비율")
+    df_pie = pd.DataFrame({"항목": ["원금", "이자", "보너스"], "금액": [t_prin, t_int, t_bonus]})
+    fig = px.pie(df_pie, values="금액", names="항목", hole=0.4)
+    fig.update_traces(texttemplate='<b>%{label}</b><br>%{value:,.0f} 만원')
+    st.plotly_chart(fig, use_container_width=True)
