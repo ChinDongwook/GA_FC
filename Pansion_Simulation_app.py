@@ -15,8 +15,8 @@ import datetime
 
 # --- [1] 페이지 기본 설정 ---
 st.set_page_config(
-    page_title="프리미엄 연금 컨설팅 시뮬레이터",
-    page_icon="??",
+    page_title="최저보증 변액종신연금 컨설팅 시뮬레이터",
+    page_icon="프리미엄",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -97,7 +97,7 @@ with st.sidebar:
     )
 
 # --- [4] 메인 화면 대시보드 ---
-st.title("?? 프리미엄 연금 컨설턴트 Pro [v1.6.0]")
+st.title(" 프리미엄 최저보증 변액종신연금 컨설턴트 ")
 st.markdown("---")
 
 t_prin, t_int, t_bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
@@ -131,7 +131,7 @@ st.markdown("---")
 
 # 3. 두 번째 차트: 1년 단위 비교 (바 차트)
 # ? 변경점: 제목 앞에 '2. ' 넘버링 추가
-st.subheader("2. ?? 1년 단위 개시 연령별 월 수령액 비교")
+st.subheader("2. 1년 단위 개시 연령별 월 수령액 비교")
 st.caption("은퇴 시기를 1년 늦출 때마다 연금 수령액이 얼마나 극적으로 상승하는지 확인하세요.")
 start_age, end_age = compare_range
 compare_ages = list(range(start_age, end_age + 1))
@@ -151,7 +151,7 @@ st.markdown("---")
 
 # 4. 세 번째 차트: 생존 연령별 누계액 (영역 차트)
 # ? 변경점: 제목 앞에 '3. ' 넘버링 추가
-st.subheader(f"3. ?? 생존 연령별 연금 누계액 및 총 수익률 ({target_r_age}세 개시 기준)")
+st.subheader(f"3. 생존 연령별 연금 누계액 및 총 수익률 ({target_r_age}세 개시 기준)")
 st.caption("90세부터 130세까지 생존 시 수령하는 총 누계액과 납입 원금 대비 수익률입니다.")
 
 survival_ages = list(range(90, 131))
