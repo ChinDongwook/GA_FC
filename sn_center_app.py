@@ -1,4 +1,5 @@
 import streamlit as st
+import Pansion_Simulation_app
 
 st.set_page_config(page_title="더블유에셋 성남센터", layout="wide")
 
