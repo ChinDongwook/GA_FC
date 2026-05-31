@@ -13,6 +13,15 @@ import pandas as pd
 import plotly.express as px
 import datetime
 
+st.markdown("""
+    <style>
+    .stCaption {
+        font-size: 18px !important;
+    }
+    </style>
+    """, unsafe_allow_html=True)
+ 
+
 # --- [1] 페이지 기본 설정 ---
 st.set_page_config(
     page_title="최저보증 변액종신연금 컨설팅 시뮬레이터",
