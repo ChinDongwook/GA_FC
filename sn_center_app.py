@@ -1,73 +1,56 @@
 import streamlit as st
-import pandas as pd
-import plotly.express as px
-import datetime
 
-# --- [1] 페이지 설정 ---
+# 페이지 레이아웃 설정
 st.set_page_config(page_title="더블유에셋 성남센터", layout="wide")
 
-# --- [2] 계산 로직 ---
-def calculate_details(current_age, gender, monthly_pay, p_years, r_age):
-    passed = r_age - current_age
-    bonus = 0.24 if passed >= 30 else (0.16 if passed >= 25 else (0.07 if passed >= 20 else 0))
-    p_rate = 0.040 if 55 <= r_age < 65 else 0.045
-    if gender == "남": p_rate += 0.002
-    
-    total_prin = monthly_pay * 12 * p_years
-    total_interest = 0
-    for year in range(1, p_years + 1):
-        time_to_retire = r_age - (current_age + year) + 1
-        y_8 = max(0, min(time_to_retire, 20 - year + 1))
-        y_5 = max(0, time_to_retire - y_8)
-        total_interest += (monthly_pay * 12) * (0.08 * y_8 + 0.05 * y_5)
-    
-    final_reserve = (total_prin + total_interest) * (1 + bonus)
-    return total_prin, total_interest, bonus, final_reserve, final_reserve * p_rate
+# 사이드바 (문의 및 위치 정보)
+with st.sidebar:
+    st.image("https://www.w-asset.co.kr/assets/images/logo.png") # 더블유에셋 로고 사용 가능
+    st.title("📞 상담 문의")
+    st.write("전문 컨설턴트와의 1:1 상담")
+    st.info("📍 성남시 분당구/중원구 일대\n\n📞 031-000-0000")
 
-# --- [3] 메인 포털 레이아웃 (3개 탭) ---
+# 메인 페이지 타이틀
 st.title("🏢 더블유에셋 성남센터")
-tab1, tab2, tab3 = st.tabs(["1. 센터 소개", "2. 금융 정보 칼럼", "3. 연금 시뮬레이터"])
+st.markdown("---")
+
+# 탭 구성
+tab1, tab2, tab3 = st.tabs(["센터 소개", "금융/자산관리 전문 칼럼", "연금 시뮬레이터"])
 
 with tab1:
-    st.header("전문가 그룹, 성남센터입니다")
-    st.markdown("고객의 자산을 내 자산처럼 소중히 여기는 더블유에셋 성남센터입니다.")
-    st.divider()
-    st.subheader("센터 안내")
-    st.write("📍 위치: 경기도 성남시 (상세 주소 입력)")
-    st.write("📞 문의: 센터 연락처 입력")
+    st.header("신뢰와 전문성으로 자산을 설계합니다")
+    st.write("더블유에셋 성남센터는 객관적인 데이터를 바탕으로 고객의 라이프사이클에 최적화된 자산관리 솔루션을 제공합니다.")
+    col1, col2 = st.columns(2)
+    with col1:
+        st.subheader("우리의 원칙")
+        st.write("✅ 투명한 수수료 체계 및 데이터 기반 분석")
+        st.write("✅ 고객 중심의 맞춤형 은퇴 설계")
+    with col2:
+        st.subheader("전문 컨설팅 분야")
+        st.write("- 연금저축/IRP/ISA 자산운용 전략")
+        st.write("- 법인/개인 절세 및 세금 컨설팅")
 
 with tab2:
-    st.header("금융 정보 칼럼")
+    st.header("금융/자산관리 전문 지식")
     st.markdown("---")
-    st.subheader("💡 박곰희 노후준비 머니 매니지먼트")
-    st.write("현금으로 썩히지 마세요! 퇴직연금(DC형) 운용 팁을 확인하세요.")
-    if st.button("박곰희 투자 전략 더 보기"):
-        st.write("1. 계좌 시스템화: 무관심 투자가 장기 수익률을 높입니다.")
-        st.write("2. 깔대기 전략: 월급통장 → CMA → ISA 계좌로 흐르게 하세요.")
     
-    st.markdown("---")
-    st.subheader("💰 ISA 계좌 활용법")
-    st.write("전 금융기관 통틀어 딱 1개만 개설 가능한 ISA, 절세의 핵심입니다.")
+    st.subheader("💡 현금으로 썩히지 마세요: 퇴직연금 시스템화")
+    st.write("DC형 퇴직연금 계좌는 방치하는 순간 물가 상승률에 의해 자산이 깎입니다. 증권사 계좌로 시스템화하여 자산을 관리하세요.")
+    
+    st.subheader("💰 절세의 핵심: ISA 계좌 활용법")
+    st.write("1인당 1개만 가능한 ISA 계좌, 어떻게 활용하느냐에 따라 10년 후 자산 차이가 달라집니다.")
+    st.info("자세한 상담은 센터 상담 신청을 통해 확인하세요.")
 
 with tab3:
     st.header("프리미엄 연금 시뮬레이터")
-    st.write("현재 나이와 납입 계획을 입력하여 노후 수령액을 계산해 보세요.")
+    st.write("더블유에셋 성남센터가 제공하는 최적의 연금 설계 툴입니다.")
+    st.write("아래 버튼을 클릭하시면 새 창 열림 없이 현재 창에서 바로 계산을 시작합니다.")
     
-    # 시뮬레이터 입력창
-    col1, col2 = st.columns(2)
-    with col1:
-        gender = st.selectbox("성별", ["남", "여"], index=1)
-        birth_year = st.number_input("출생 연도", 1940, 2024, 1994)
-    with col2:
-        monthly_pay = st.number_input("월 납입 (만원)", 10, 500, 50)
-        pay_years = st.selectbox("납입 기간 (년)", [5, 10, 15, 20, 25], index=1)
-    
-    current_age = datetime.date.today().year - birth_year
-    target_r_age = st.slider("연금 개시 나이", current_age + pay_years + 5, 90, 65)
-    
-    t_prin, t_int, bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
-    
-    st.divider()
-    m_col1, m_col2 = st.columns(2)
-    m_col1.metric("최종 연금 준비금", f"{f_res:,.0f} 만원")
-    m_col2.metric("예상 월 수령액", f"{(ann_pen/12):,.0f} 만원")
+    # 현재 창에서 시뮬레이터로 이동
+    st.markdown("""
+        <a href="https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/" 
+           target="_self" 
+           style="background-color: #ff4b4b; color: white; padding: 15px 25px; text-decoration: none; border-radius: 8px; font-weight: bold; font-size: 18px;">
+           👉 연금 시뮬레이터 실행하기
+        </a>
+    """, unsafe_allow_html=True)
