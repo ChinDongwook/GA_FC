@@ -215,10 +215,10 @@ st.markdown("---")
 st.subheader("4. 기대여명으로 보는 예상 수익")
 
 # 기대수명 범위 계산 (기본값 + 보정값 적용)
-base_life = 82 if gender == "남" else 88
+base_life = 89 if gender == "남" else 95
 mid_life = int(base_life + (target_r_age - current_age) * 0.25)
-life_range_start = mid_life - 5
-life_range_end = mid_life + 5
+life_range_start = mid_life - 3
+life_range_end = mid_life + 10
 
 st.write(f"통계를 바탕으로 한 고객님의 예상 기대수명은 **{life_range_start}세 ~ {life_range_end}세**입니다.")
 st.caption("※ 건강관리와 의학 발달에 따라 기대수명은 더욱 늘어날 수 있으며, 장수하실수록 연금의 가치는 극대화됩니다.")
