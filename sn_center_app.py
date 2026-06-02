@@ -18,7 +18,7 @@ def inject_custom_css():
 inject_custom_css()
 
 # 1. 로고 배치 [cite: 31]
-st.image("images/logo.png", width=200) 
+st.image("images/logo.png", width=150) 
 
 # 메인 헤더
 st.markdown("""
