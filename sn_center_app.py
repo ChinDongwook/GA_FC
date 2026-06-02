@@ -48,7 +48,7 @@ def safe_image(path, width=None, use_container_width=False):
         st.warning(f"이미지를 불러올 수 없습니다. 경로를 확인하세요: {path}")
 
 # 로고 및 메인 구성
-safe_image("images/logo.png", width=150)
+safe_image("images/logo.png", width=100)
 
 st.markdown("""
     <div class="hero-container">
@@ -57,7 +57,7 @@ st.markdown("""
     </div>
 """, unsafe_allow_html=True)
 
-tab1, tab2 = st.tabs(["🏢 센터 소개", "🚀 연금 시뮬레이터"])
+tab1, tab2 = st.tabs([" 센터 소개", " 연금 시뮬레이터"])
 
 with tab1:
     safe_image("images/main_banner.jpg", use_container_width=True)
