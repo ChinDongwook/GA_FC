@@ -237,3 +237,18 @@ fig_roi_range.update_layout(yaxis_title="원금 대비 수익률 (%)", xaxis_tit
 st.plotly_chart(fig_roi_range, use_container_width=True)
 
 st.success(f"고객님께서 **{life_range_end}세**까지 생존하실 경우, 원금 대비 최대 **{roi_range_data.iloc[2]['수익률']:.1f}%**의 수익을 기대할 수 있습니다.")
+
+# --- [1] 페이지 기본 설정 ---
+st.set_page_config(page_title="프리미엄 연금 컨설팅 시뮬레이터", layout="wide")
+
+# [핵심] 텍스트 크기 일괄 확대 CSS 추가
+st.markdown("""
+    <style>
+    /* 전체 폰트 크기 확대 */
+    .stApp { font-size: 18px !important; }
+    /* 서브헤더 및 텍스트 굵게 */
+    h1, h2, h3 { font-weight: 700 !important; }
+    /* 메트릭(수치) 폰트 크기 확대 */
+    [data-testid="stMetricValue"] { font-size: 28px !important; }
+    </style>
+    """, unsafe_allow_html=True)
