@@ -7,7 +7,7 @@ def inject_custom_css():
     st.markdown("""
         <style>
         /* Pretendard 폰트 적용 및 기본 스타일 */
-        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        @import url('[https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css](https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css)');
         
         html, body, [class*="st-"] {
             font-family: 'Pretendard', sans-serif !important;
@@ -72,7 +72,7 @@ with tab2:
     st.markdown("---")
     st.write("안정적인 미래를 위한 첫걸음, 아래 시뮬레이터를 통해 확인해 보세요.")
     
-    sim_url = "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/"
+    sim_url = "[https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/](https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/)"
     
     st.link_button("연금 시뮬레이터 시작하기", sim_url, use_container_width=True)
     
@@ -82,6 +82,3 @@ with tab2:
 # 푸터
 st.markdown("---")
 st.caption("© 2026 더블유에셋 성남센터 | 전문 금융 컨설팅")
-```eof
-
-업그레이드된 코드는 시각적인 위계질서가 훨씬 명확해져서 고객들이 보기에 더 신뢰감을 느낄 것입니다. 추가로 수정하고 싶으신 부분이나 기능이 있다면 언제든 말씀해 주세요!
