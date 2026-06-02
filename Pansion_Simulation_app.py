@@ -203,24 +203,45 @@ fig_cum.update_layout(
 )
 
 
-# 스택(쌓기) 모드 적용
+# 스택(쌓기) 모드 적용 
 fig_cum.update_layout(barmode='stack') 
 
 st.plotly_chart(fig_cum, use_container_width=True)
 
-def get_expected_lifespan(current_age, gender, target_r_age):
-    # 1. 기본 기대수명 (통계청 최신치 근사값)
-    base_life = 81 if gender == "남" else 87
-    
-    # 2. 미래 은퇴 시점까지의 연차 계산
-    years_to_retire = target_r_age - current_age
-    
-    # 3. 매년 0.25세씩 기대수명 연장 가정 (보수적/희망적 추정)
-    extended_life = base_life + (years_to_retire * 0.25)
-    
-    return round(extended_life)
 
-# 시뮬레이터 메인 로직 내 활용
-estimated_end_age = get_expected_lifespan(current_age, gender, target_r_age)
-st.info(f"💡 의학 발달 및 통계적 추세를 고려한 고객님의 예상 생존 나이는 **{estimated_end_age}세**입니다.")
+# 기대여명을 바탕으로 직관전 안내 하기
+import plotly.graph_objects as go
+
+def get_dynamic_lifespan(current_age, gender, target_r_age):
+    base_life = 82 if gender == "남" else 88
+    # 미래 은퇴 시점까지 늘어날 기대수명 보정 (연 0.25세)
+    future_extension = (target_r_age - current_age) * 0.25
+    return int(base_life + future_extension)
+
+# --- 메인 대시보드 내 수익성 분석 영역 ---
+est_life = get_dynamic_lifespan(current_age, gender, target_r_age)
+
+st.subheader("📊 생존 시나리오별 연금 수익 가치 분석")
+st.markdown(f"은퇴 시점({target_r_age}세)을 고려한 고객님의 기대수명은 **{est_life}세**입니다.")
+
+# 데이터 생성
+survival_points = [80, 90, 100, est_life]
+profit_data = []
+for s_age in survival_points:
+    received_years = max(0, s_age - target_r_age + 1)
+    total_recv = ann_pen * received_years
+    roi = (total_recv / t_prin) * 100 if t_prin > 0 else 0
+    profit_data.append({"나이": s_age, "총 수령액": total_recv, "수익률": roi})
+
+df_roi = pd.DataFrame(profit_data)
+
+# 테이블 및 그래프 시각화
+col1, col2 = st.columns([1, 2])
+with col1:
+    st.table(df_roi.style.format({"총 수령액": "{:,.0f} 만원", "수익률": "{:.1f}%"}))
+with col2:
+    fig_roi = px.area(df_roi, x="나이", y="수익률", text="수익률", 
+                      title="생존 연령에 따른 누적 수익률 성장 추이")
+    fig_roi.update_traces(texttemplate='%{text:.1f}%', textposition='top center')
+    st.plotly_chart(fig_roi, use_container_width=True)
 
