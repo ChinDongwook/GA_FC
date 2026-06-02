@@ -50,8 +50,7 @@ inject_custom_css()
 # 메인 헤더
 st.markdown("""
     <div class="hero-container">
-    st.image("images/logo.png", width=200)
-        <h1> 더블유에셋 성남센터</h1>
+         <h1> 더블유에셋 성남센터</h1>
         <p style="font-size: 20px;">고객님의 성공적인 자산 관리를 위해 최선을 다하는 파트너입니다.</p>
     </div>
 """, unsafe_allow_html=True)
