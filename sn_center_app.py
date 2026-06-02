@@ -6,51 +6,24 @@ st.set_page_config(page_title="더블유에셋 성남센터", layout="wide", pag
 def inject_custom_css():
     st.markdown("""
         <style>
-        /* Pretendard 폰트 적용 및 기본 스타일 */
-        @import url('[https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css](https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css)');
-        
-        html, body, [class*="st-"] {
-            font-family: 'Pretendard', sans-serif !important;
-        }
-
-        /* Hero 섹션 스타일링 */
-        .hero-container {
-            background-color: #002147;
-            color: #FFFFFF;
-            padding: 40px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-        }
-
-        /* 탭 스타일 조정 */
-        .stTabs [data-baseweb="tab"] {
-            font-size: 18px !important;
-            font-weight: 600 !important;
-            color: #002147 !important;
-        }
-
-        /* 버튼 호버 효과 및 컬러 변경 */
-        div.stButton > button, div.stLinkButton > a {
-            background-color: #002147 !important;
-            color: white !important;
-            border: none !important;
-            font-weight: 600 !important;
-            transition: all 0.3s ease;
-        }
-        
-        div.stLinkButton > a:hover {
-            background-color: #d4af37 !important;
-            color: #000 !important;
-        }
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        html, body, [class*="st-"] { font-family: 'Pretendard', sans-serif !important; }
+        .hero-container { background-color: #002147; color: #FFFFFF; padding: 40px; border-radius: 15px; margin-bottom: 30px; }
+        .stTabs [data-baseweb="tab"] { font-size: 18px !important; font-weight: 600 !important; color: #002147 !important; }
+        div.stLinkButton > a { background-color: #002147 !important; color: white !important; font-weight: 600 !important; transition: all 0.3s ease; }
+        div.stLinkButton > a:hover { background-color: #d4af37 !important; color: #000 !important; }
         </style>
     """, unsafe_allow_html=True)
 
 inject_custom_css()
 
+# 1. 로고 배치 [cite: 31]
+st.image("images/logo.png", width=200) 
+
 # 메인 헤더
 st.markdown("""
     <div class="hero-container">
-         <h1> 더블유에셋 성남센터</h1>
+        <h1>🏢 더블유에셋 성남센터</h1>
         <p style="font-size: 20px;">고객님의 성공적인 자산 관리를 위해 최선을 다하는 파트너입니다.</p>
     </div>
 """, unsafe_allow_html=True)
@@ -59,6 +32,9 @@ st.markdown("""
 tab1, tab2 = st.tabs(["🏢 센터 소개", "🚀 연금 시뮬레이터"])
 
 with tab1:
+    # 2. 메인 배너 이미지 적용 [cite: 26, 31]
+    st.image("images/main_banner.jpg", use_container_width=True)
+    
     col1, col2 = st.columns([2, 1])
     with col1:
         st.header("성남센터에 오신 것을 환영합니다")
@@ -72,13 +48,9 @@ with tab2:
     st.markdown("---")
     st.write("안정적인 미래를 위한 첫걸음, 아래 시뮬레이터를 통해 확인해 보세요.")
     
-    sim_url = "[https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/](https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/)"
-    
+    sim_url = "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/"
     st.link_button("연금 시뮬레이터 시작하기", sim_url, use_container_width=True)
-    
-    st.markdown("<br>", unsafe_allow_html=True)
     st.warning("이동 후 고객님의 정보를 입력하여 시뮬레이션을 진행하세요.")
 
-# 푸터
 st.markdown("---")
 st.caption("© 2026 더블유에셋 성남센터 | 전문 금융 컨설팅")
