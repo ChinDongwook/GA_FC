@@ -23,7 +23,7 @@ st.image("images/logo.png", width=200)
 # 메인 헤더
 st.markdown("""
     <div class="hero-container">
-        <h1>🏢 더블유에셋 성남센터</h1>
+        <h1>WASSET 성남센터</h1>
         <p style="font-size: 20px;">고객님의 성공적인 자산 관리를 위해 최선을 다하는 파트너입니다.</p>
     </div>
 """, unsafe_allow_html=True)
@@ -41,7 +41,7 @@ with tab1:
         st.write("전문적인 금융 컨설팅과 함께 안정적인 노후를 준비하세요.")
         st.info("💡 센터에 대한 더 자세한 정보나 상담 예약은 언제든 문의해 주세요.")
     with col2:
-        st.metric(label="전문 상담사 수", value="15명+", delta="지속 성장 중")
+        st.metric(label="전문 상담사 수", value="45명+", delta="고객과 함께 성장 중")
 
 with tab2:
     st.header("프리미엄 연금 시뮬레이터")
