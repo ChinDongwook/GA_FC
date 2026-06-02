@@ -172,7 +172,7 @@ st.markdown("---")
 st.subheader(f"3. 생존 연령별 연금 누계액 및 납입원금 ({target_r_age}세 개시 기준)")
 st.caption("붉은색 영역은 납입하신 원금이며, 파란색 영역은 원금 위로 쌓이는 연금 수익의 총액입니다.")
 
-survival_ages = list(range(50, 131))
+survival_ages = list(range(70, 131))
 cumulative_data = []
 
 for s_age in survival_ages:
