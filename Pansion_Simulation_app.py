@@ -212,7 +212,8 @@ st.plotly_chart(fig_cum, use_container_width=True)
 # 기대여명을 바탕으로 직관전 안내 하기
 # --- [4] 기대여명으로 보는 예상 수익 (신규 추가 섹션) ---
 st.markdown("---")
-st.subheader("4. 기대여명으로 보는 예상 수익")
+# 체크박스를 통해 펼쳐보기 기능 구현
+with st.expander("📊 [4] 기대여명으로 보는 예상 수익 상세 분석"):
 
 # 기대수명 범위 계산 (기본값 + 보정값 적용)
 base_life = 92 if gender == "남" else 98
