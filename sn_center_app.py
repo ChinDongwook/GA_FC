@@ -1,50 +1,87 @@
 import streamlit as st
 
 # 페이지 설정
-st.set_page_config(page_title="더블유에셋 성남센터", layout="wide")
+st.set_page_config(page_title="더블유에셋 성남센터", layout="wide", page_icon="🏢")
 
-# 다크/라이트 테마에 반응하는 고급 CSS 스타일링
+def inject_custom_css():
+    st.markdown("""
+        <style>
+        /* Pretendard 폰트 적용 및 기본 스타일 */
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        html, body, [class*="st-"] {
+            font-family: 'Pretendard', sans-serif !important;
+        }
+
+        /* Hero 섹션 스타일링 */
+        .hero-container {
+            background-color: #002147;
+            color: #FFFFFF;
+            padding: 40px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+        }
+
+        /* 탭 스타일 조정 */
+        .stTabs [data-baseweb="tab"] {
+            font-size: 18px !important;
+            font-weight: 600 !important;
+            color: #002147 !important;
+        }
+
+        /* 버튼 호버 효과 및 컬러 변경 */
+        div.stButton > button, div.stLinkButton > a {
+            background-color: #002147 !important;
+            color: white !important;
+            border: none !important;
+            font-weight: 600 !important;
+            transition: all 0.3s ease;
+        }
+        
+        div.stLinkButton > a:hover {
+            background-color: #d4af37 !important;
+            color: #000 !important;
+        }
+        </style>
+    """, unsafe_allow_html=True)
+
+inject_custom_css()
+
+# 메인 헤더
 st.markdown("""
-    <style>
-    /* 탭 전체 폰트 크기 및 가독성 향상 */
-    .stTabs [data-baseweb="tab"] { 
-        font-size: 20px !important; 
-        font-weight: 600 !important;
-        padding: 10px 20px !important;
-    }
-    
-    /* 본문 글자 크기 키우기 */
-    .stMarkdown, .stWrite, .stInfo { 
-        font-size: 18px !important; 
-    }
-    
-    /* 다크 테마용 가독성 유지 스타일 */
-    [data-testid="stAppViewContainer"] {
-        color: inherit;
-    }
-    </style>
+    <div class="hero-container">
+        <h1>🏢 더블유에셋 성남센터</h1>
+        <p style="font-size: 20px;">고객님의 성공적인 자산 관리를 위해 최선을 다하는 파트너입니다.</p>
+    </div>
 """, unsafe_allow_html=True)
-
-st.title("🏢 더블유에셋 성남센터")
-st.markdown("더블유에셋 성남센터는 고객님의 성공적인 자산 관리를 위해 최선을 다합니다.")
-st.markdown("---")
 
 # 탭 구성
 tab1, tab2 = st.tabs(["🏢 센터 소개", "🚀 연금 시뮬레이터"])
 
 with tab1:
-    st.header("성남센터에 오신 것을 환영합니다")
-    st.write("전문적인 금융 컨설팅과 함께 안정적인 노후를 준비하세요.")
-    st.info("센터에 대한 더 자세한 정보나 상담 예약은 언제든 문의해 주세요.")
+    col1, col2 = st.columns([2, 1])
+    with col1:
+        st.header("성남센터에 오신 것을 환영합니다")
+        st.write("전문적인 금융 컨설팅과 함께 안정적인 노후를 준비하세요.")
+        st.info("💡 센터에 대한 더 자세한 정보나 상담 예약은 언제든 문의해 주세요.")
+    with col2:
+        st.metric(label="전문 상담사 수", value="15명+", delta="지속 성장 중")
 
 with tab2:
     st.header("프리미엄 연금 시뮬레이터")
-    st.write("아래 버튼을 클릭하시면 시뮬레이션 페이지가 새 창으로 열립니다.")
+    st.markdown("---")
+    st.write("안정적인 미래를 위한 첫걸음, 아래 시뮬레이터를 통해 확인해 보세요.")
     
     sim_url = "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/"
     
-    # 버튼 스타일링 (다크 테마에서도 잘 보이는 색상 선택)
     st.link_button("연금 시뮬레이터 시작하기", sim_url, use_container_width=True)
-
-    st.markdown("<br><br>", unsafe_allow_html=True)
+    
+    st.markdown("<br>", unsafe_allow_html=True)
     st.warning("이동 후 고객님의 정보를 입력하여 시뮬레이션을 진행하세요.")
+
+# 푸터
+st.markdown("---")
+st.caption("© 2026 더블유에셋 성남센터 | 전문 금융 컨설팅")
+```eof
+
+업그레이드된 코드는 시각적인 위계질서가 훨씬 명확해져서 고객들이 보기에 더 신뢰감을 느낄 것입니다. 추가로 수정하고 싶으신 부분이나 기능이 있다면 언제든 말씀해 주세요!
