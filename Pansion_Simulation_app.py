@@ -208,3 +208,19 @@ fig_cum.update_layout(barmode='stack')
 
 st.plotly_chart(fig_cum, use_container_width=True)
 
+def get_expected_lifespan(current_age, gender, target_r_age):
+    # 1. 기본 기대수명 (통계청 최신치 근사값)
+    base_life = 81 if gender == "남" else 87
+    
+    # 2. 미래 은퇴 시점까지의 연차 계산
+    years_to_retire = target_r_age - current_age
+    
+    # 3. 매년 0.25세씩 기대수명 연장 가정 (보수적/희망적 추정)
+    extended_life = base_life + (years_to_retire * 0.25)
+    
+    return round(extended_life)
+
+# 시뮬레이터 메인 로직 내 활용
+estimated_end_age = get_expected_lifespan(current_age, gender, target_r_age)
+st.info(f"💡 의학 발달 및 통계적 추세를 고려한 고객님의 예상 생존 나이는 **{estimated_end_age}세**입니다.")
+
