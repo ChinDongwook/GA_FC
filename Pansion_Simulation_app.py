@@ -210,38 +210,59 @@ st.plotly_chart(fig_cum, use_container_width=True)
 
 
 # 기대여명을 바탕으로 직관전 안내 하기
+import streamlit as st
+import pandas as pd
+import plotly.express as px
 import plotly.graph_objects as go
 
-def get_dynamic_lifespan(current_age, gender, target_r_age):
-    base_life = 82 if gender == "남" else 88
-    # 미래 은퇴 시점까지 늘어날 기대수명 보정 (연 0.25세)
-    future_extension = (target_r_age - current_age) * 0.25
-    return int(base_life + future_extension)
+# [디자인 강화] 스타일 적용
+st.markdown("""
+    <style>
+    .big-font { font-size:24px !important; font-weight:bold; color: #1f77b4; }
+    .stMetric { background-color: #f0f2f6; padding: 15px; border-radius: 10px; }
+    </style>
+    """, unsafe_allow_html=True)
 
-# --- 메인 대시보드 내 수익성 분석 영역 ---
-est_life = get_dynamic_lifespan(current_age, gender, target_r_age)
+# [로직 고도화] 기대수명 보정 함수
+def get_refined_lifespan(current_age, gender, target_r_age):
+    base = 82 if gender == "남" else 88
+    # 은퇴 시점까지 의학발달에 따른 기대수명 연장 (0.25세/년)
+    return int(base + (target_r_age - current_age) * 0.25)
 
-st.subheader("📊 생존 시나리오별 연금 수익 가치 분석")
-st.markdown(f"은퇴 시점({target_r_age}세)을 고려한 고객님의 기대수명은 **{est_life}세**입니다.")
+# --- 메인 화면 레이아웃 ---
+st.title("🛡️ 프리미엄 연금 전략 리포트")
+est_life = get_refined_lifespan(current_age, gender, target_r_age)
 
-# 데이터 생성
-survival_points = [80, 90, 100, est_life]
-profit_data = []
-for s_age in survival_points:
-    received_years = max(0, s_age - target_r_age + 1)
-    total_recv = ann_pen * received_years
-    roi = (total_recv / t_prin) * 100 if t_prin > 0 else 0
-    profit_data.append({"나이": s_age, "총 수령액": total_recv, "수익률": roi})
+# 1. 상단 핵심 지표 (가독성 최적화)
+col1, col2, col3 = st.columns(3)
+col1.metric("납입 원금", f"{t_prin/10000:,.1f} 억원")
+col2.metric("예상 월 연금", f"{ann_pen/12/10000:,.1f} 억원", delta=f"{est_life}세까지 수령")
+col3.metric("기대 수명", f"{est_life} 세", delta="의학 발전 반영")
 
-df_roi = pd.DataFrame(profit_data)
+st.markdown("---")
 
-# 테이블 및 그래프 시각화
-col1, col2 = st.columns([1, 2])
-with col1:
-    st.table(df_roi.style.format({"총 수령액": "{:,.0f} 만원", "수익률": "{:.1f}%"}))
-with col2:
-    fig_roi = px.area(df_roi, x="나이", y="수익률", text="수익률", 
-                      title="생존 연령에 따른 누적 수익률 성장 추이")
-    fig_roi.update_traces(texttemplate='%{text:.1f}%', textposition='top center')
-    st.plotly_chart(fig_roi, use_container_width=True)
+# 2. 고급 수익성 분석 차트
+st.subheader("📈 생존 연령별 연금 누적 수익률")
+st.caption("고객님의 장수가 곧 최고의 투자 수익률이 되는 구조입니다.")
 
+# 데이터 준비
+df_roi = pd.DataFrame([
+    {"나이": s, "수익률": (max(0, ann_pen * (s - target_r_age + 1) - t_prin) / t_prin) * 100}
+    for s in range(80, est_life + 6, 5)
+])
+
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=df_roi["나이"], y=df_roi["수익률"], 
+                         fill='tozeroy', mode='lines+markers',
+                         line=dict(color='#1f77b4', width=3)))
+fig.update_layout(plot_bgcolor='white', yaxis_title="원금 대비 수익률 (%)", xaxis_title="생존 나이")
+st.plotly_chart(fig, use_container_width=True)
+
+# 3. 세련된 요약 표
+st.subheader("📑 구간별 예상 수령액 리포트")
+summary_data = {
+    "생존 구간": [f"{target_r_age}~80세", f"{target_r_age}~90세", f"{target_r_age}~{est_life}세"],
+    "총 수령액": [ann_pen*(80-target_r_age+1), ann_pen*(90-target_r_age+1), ann_pen*(est_life-target_r_age+1)],
+    "예상 수익률": [f"{((ann_pen*(80-target_r_age+1)-t_prin)/t_prin)*100:.1f}%" for _ in range(3)]
+}
+st.table(pd.DataFrame(summary_data))
