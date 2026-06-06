@@ -236,7 +236,7 @@ fig_roi_range = px.bar(roi_range_data, x="구간", y="수익률", text_auto='.1f
 fig_roi_range.update_layout(yaxis_title="원금 대비 수익률 (%)", xaxis_title="")
 st.plotly_chart(fig_roi_range, use_container_width=True)
 
-st.success(f"고객님께서 **{life_range_end}세**까지 생존하실 경우, 원금 대비 최대 **{roi_range_data.iloc[2]['수익률']:.1f}%**의 수익을 기대할 수 있습니다.")
+st.success(f"고객님께서 {life_range_end}세**까지 생존하실 경우, 원금 대비 최대 {roi_range_data.iloc[2]['수익률']:.1f}%의 수익을 기대할 수 있습니다.")
 
 # --- [1] 페이지 기본 설정 ---
 st.set_page_config(page_title="프리미엄 연금 컨설팅 시뮬레이터", layout="wide")
