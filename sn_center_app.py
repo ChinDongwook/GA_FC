@@ -11,7 +11,7 @@ if 'logged_in' not in st.session_state:
 def inject_custom_css():
     st.markdown("""
     <style>
-    /* 수정된 부분: 콘텐츠 컨테이너 너비 제한 */
+    /* 콘텐츠 컨테이너 너비 제한 */
     .block-container {
         max-width: 1200px !important;
         margin: 0 auto !important;
@@ -54,14 +54,39 @@ def inject_custom_css():
     </style>
     """, unsafe_allow_html=True)
 
-# 4. 이미지 오류 방지 함수 (복구됨)
+# 4. 이미지 오류 방지 함수
 def safe_image(path, width=None, use_container_width=False):
     try:
         st.image(path, width=width, use_container_width=use_container_width)
     except Exception:
         st.warning(f"이미지를 불러올 수 없습니다. 경로를 확인하세요: {path}")
 
-# 5. 로그인 화면 함수
+# 5. 업무 매뉴얼 페이지 렌더링 함수
+def show_manual_page():
+    st.header("📖 성남센터 업무 매뉴얼")
+    
+    tab_names = [
+        "공지사항", "신규 계약", "보험금 청구", "고객 관리", "상품 정보",
+        "수수료/평가", "교육 일정", "지원 서식", "센터 연락처", "FAQ"
+    ]
+    tabs = st.tabs(tab_names)
+    
+    for i, tab in enumerate(tabs):
+        with tab:
+            if tab_names[i] == "센터 연락처":
+                st.subheader("📞 센터 내 주요 연락처")
+                st.table({
+                    "부서/직함": ["센터장", "매니저", "지원팀"],
+                    "성명": ["홍길동", "김철수", "이영희"],
+                    "내선번호": ["101", "102", "103"]
+                })
+            else:
+                st.subheader(f"{tab_names[i]}")
+                with st.expander(f"📌 {tab_names[i]} 관련 핵심 요약 및 지침 클릭"):
+                    st.write(f"이곳에 {tab_names[i]}에 대한 세부 업무 매뉴얼 내용을 작성 및 업데이트하세요.")
+                    st.info("필요 시 다운로드 링크나 세부 가이드를 텍스트로 보완할 수 있습니다.")
+
+# 6. 로그인 화면 함수
 def login_screen():
     st.markdown("<h2 style='text-align: center;'>더블유에셋 성남센터 로그인</h2>", unsafe_allow_html=True)
     with st.form("login_form"):
@@ -76,7 +101,7 @@ def login_screen():
             else:
                 st.error("아이디 또는 비밀번호가 일치하지 않습니다.")
 
-# 6. 메인 홈페이지 함수
+# 7. 메인 홈페이지 함수
 def main_app():
     inject_custom_css()
     
@@ -85,7 +110,7 @@ def main_app():
         if st.button("로그아웃"):
             st.session_state['logged_in'] = False
             st.rerun()
-        selected_menu = st.radio("📌 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
+        selected_menu = st.radio("📌 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
 
     # 로고 및 헤더
     safe_image("images/logo.png", width=100)
@@ -99,6 +124,8 @@ def main_app():
     elif selected_menu == "🚀 연금 시뮬레이터":
         st.header("프리미엄 연금 시뮬레이터")
         st.link_button("시뮬레이터 시작하기", "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/")
+    elif selected_menu == "📖 업무 매뉴얼":
+        show_manual_page()
     else:
         st.header(selected_menu)
         st.write("관련 서비스를 준비 중입니다.")
