@@ -52,8 +52,20 @@ def main_app():
         /* 버튼 */
         div.stLinkButton > a { background-color: #002147 !important; color: white !important; font-weight: 600 !important; }
         
-        /* 사이드바 라디오 버튼 텍스트 크기 키우기 */
-        div[role="radiogroup"] label { font-size: 18px !important; font-weight: 600 !important; padding-top: 10px; padding-bottom: 10px; }
+        /* 💡 수정된 부분: 사이드바 라디오 버튼 UI 살리기 및 가독성 개선 */
+        /* 메뉴 제목 폰트 크기 및 색상 */
+        div.stRadio > div[role="radiogroup"] > label {
+            font-size: 20px !important;
+            font-weight: 800 !important;
+            color: #002147 !important;
+            padding-bottom: 10px;
+        }
+        /* 메뉴 하위 항목(라디오 버튼) 텍스트 스타일 */
+        div.stRadio > div[role="radiogroup"] p {
+            font-size: 16px !important;
+            font-weight: 600 !important;
+            margin: 0px !important;
+        }
         </style>
         """, unsafe_allow_html=True)
     
@@ -100,7 +112,7 @@ def main_app():
     </div>
     """, unsafe_allow_html=True)
     
-    # --- 선택된 메뉴에 따라 메인 화면 내용 변경 (기존 탭 역할) ---
+    # --- 선택된 메뉴에 따라 메인 화면 내용 변경 ---
     if selected_menu == "🏢 센터 소개":
         safe_image("images/main_banner.jpg", use_container_width=True)
         st.header("성남센터에 오신 것을 환영합니다")
