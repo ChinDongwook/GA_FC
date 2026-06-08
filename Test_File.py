@@ -1,0 +1,109 @@
+import streamlit as st
+import pandas as pd
+import plotly.express as px
+import datetime
+from fpdf import FPDF
+import io
+
+# --- [1] 페이지 기본 설정 ---
+st.set_page_config(
+    page_title="최저보증 변액종신연금 컨설팅 시뮬레이터",
+    page_icon="🏢",
+    layout="wide",
+    initial_sidebar_state="expanded"
+)
+
+# [핵심] 텍스트 크기 일괄 확대 및 타이틀 조정 CSS
+st.markdown("""
+    <style>
+    /* 타이틀 텍스트 크기 축소 (기존 폰트 유지) */
+    h1 { font-size: 28px !important; }
+    /* 전체 폰트 크기 확대 */
+    .stApp { font-size: 18px !important; }
+    /* 서브헤더 및 텍스트 굵게 */
+    h1, h2, h3 { font-weight: 700 !important; }
+    /* 메트릭(수치) 폰트 크기 확대 */
+    [data-testid="stMetricValue"] { font-size: 28px !important; }
+    </style>
+    """, unsafe_allow_html=True)
+
+# --- [2] 계산 로직 함수 ---
+def calculate_details(current_age, gender, monthly_pay, p_years, r_age):
+    passed = r_age - current_age
+    if passed >= 30: bonus = 0.24
+    elif passed >= 25: bonus = 0.16
+    elif passed >= 20: bonus = 0.07
+    else: bonus = 0
+
+    if 30 <= r_age < 40: p_rate = 0.022
+    elif 40 <= r_age < 50: p_rate = 0.026
+    elif 50 <= r_age < 55: p_rate = 0.0285
+    elif 55 <= r_age < 65: p_rate = 0.040
+    elif 65 <= r_age < 70: p_rate = 0.045
+    elif 70 <= r_age < 80: p_rate = 0.0485
+    else: p_rate = 0.050
+    
+    if gender == "남": p_rate += 0.002
+
+    total_prin = monthly_pay * 12 * p_years
+    total_interest = 0
+    for year in range(1, p_years + 1):
+        time_to_retire = r_age - (current_age + year) + 1
+        y_8 = max(0, min(time_to_retire, 20 - year + 1))
+        y_5 = max(0, time_to_retire - y_8)
+        total_interest += (monthly_pay * 12) * (0.08 * y_8 + 0.05 * y_5)
+
+    base_reserve = total_prin + total_interest
+    bonus_amount = base_reserve * bonus
+    final_reserve = base_reserve + bonus_amount
+    annual_pension = final_reserve * p_rate
+    return total_prin, total_interest, bonus_amount, final_reserve, annual_pension
+
+# --- [3] 사이드바 (입력부) ---
+with st.sidebar:
+    st.title("고객 정보 입력")
+    gender = st.selectbox("▶ 성별", ["남", "여"], index=1)
+    col1, col2 = st.columns(2)
+    today = datetime.date.today()
+    birth_year = col1.number_input("출생 연도", min_value=1940, max_value=today.year, value=1994, step=1)
+    birth_month = col2.number_input("출생 월", min_value=1, max_value=12, value=4, step=1)
+    current_age = today.year - birth_year - (1 if today.month < birth_month else 0)
+    st.success(f"현재 나이: 만 {current_age}세")
+    monthly_pay = st.number_input("▶ 월 납입 금액 (만원)", min_value=10, max_value=500, value=50, step=10)
+    pay_years = st.selectbox("▶ 납입 기간 (년)", [5, 7, 10, 12, 15, 20, 25], index=2)
+    min_retire_age = current_age + pay_years + 5
+    target_r_age = st.slider("▶ 상세 분석할 연금 개시 나이", min_value=min_retire_age, max_value=90, value=max(65, min_retire_age))
+    compare_range = st.slider("▶ 비교할 개시 연령 범위 선택", min_value=min_retire_age, max_value=90, value=(max(60, min_retire_age), min(max(60, min_retire_age) + 10, 90)))
+
+# --- [4] 메인 화면 ---
+st.title("최저보증 변액종신연금 시뮬레이터")
+t_prin, t_int, t_bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
+
+# 요약 지표
+col1, col2, col3 = st.columns(3)
+col1.metric("총 납입 원금", f"{t_prin:,.0f} 만원")
+col2.metric(f"최종 준비금 ({target_r_age}세)", f"{f_res:,.0f} 만원", f"수익 +{(t_int+t_bonus):,.0f} 만원")
+col3.metric("예상 월 수령액", f"{ann_pen/12:,.0f} 만원/월", f"연 {ann_pen:,.0f} 만원")
+
+# 1. 파이 차트
+st.subheader("1. 예상 연금 준비금 구성 비율")
+df_pie = pd.DataFrame({"항목": ["순수 납입 원금", "누적 적립 이자", "장기유지 가산보너스"], "금액": [t_prin, t_int, t_bonus]})
+st.plotly_chart(px.pie(df_pie, values="금액", names="항목", hole=0.4, color_discrete_sequence=px.colors.sequential.Teal), use_container_width=True)
+
+# 2. 바 차트
+st.subheader("2. 연금 개시 연령별 수령액 비교")
+compare_ages = list(range(compare_range[0], compare_range[1] + 1))
+compare_data = [{"개시 연령": f"{age}세", "월 수령액 (만원)": calculate_details(current_age, gender, monthly_pay, pay_years, age)[4]/12} for age in compare_ages]
+st.plotly_chart(px.bar(pd.DataFrame(compare_data), x="개시 연령", y="월 수령액 (만원)", text_auto='.0f', color="월 수령액 (만원)", color_continuous_scale="Blues"), use_container_width=True)
+
+# 3. 영역 차트
+st.subheader(f"3. 생존 연령별 연금 누계액 및 납입원금 ({target_r_age}세 개시 기준)")
+df_cum = pd.DataFrame([{"생존 나이": s_age, "납입 원금": t_prin, "연금 누적 수익": max(0, (ann_pen * (s_age - target_r_age + 1)) - t_prin)} for s_age in range(80, 131)])
+st.plotly_chart(px.area(df_cum, x="생존 나이", y=["납입 원금", "연금 누적 수익"], color_discrete_map={"납입 원금": "#E74C3C", "연금 누적 수익": "#2E86C1"}), use_container_width=True)
+
+# 4. 기대여명 섹션
+st.subheader("4. 기대여명으로 보는 예상 수익")
+base_life = 92 if gender == "남" else 98
+mid_life = int(base_life + (target_r_age - current_age) * 0.25)
+roi_range_data = pd.DataFrame([{"구간": "하단", "수익률": (max(0, ann_pen * (mid_life-2 - target_r_age + 1) - t_prin) / t_prin) * 100}, {"구간": "중단", "수익률": (max(0, ann_pen * (mid_life - target_r_age + 1) - t_prin) / t_prin) * 100}, {"구간": "상단", "수익률": (max(0, ann_pen * (mid_life+10 - target_r_age + 1) - t_prin) / t_prin) * 100}])
+st.plotly_chart(px.bar(roi_range_data, x="구간", y="수익률", text_auto='.1f'), use_container_width=True)
