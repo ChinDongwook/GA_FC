@@ -138,4 +138,30 @@ def main_app():
     elif selected_menu == "📊 재무 설계":
         st.header("맞춤형 재무 설계")
         st.write("고객님의 라이프사이클에 맞춘 종합 재무 설계 서비스를 제공합니다.")
-        st.link_button("재무 설계 페이지로 이동", "https://example
+        st.link_button("재무 설계 페이지로 이동", "https://example.com", use_container_width=True)
+
+    elif selected_menu == "📈 투자 전략":
+        st.header("최적의 투자 전략")
+        st.write("시장 트렌드를 반영한 포트폴리오 및 투자 전략을 확인하세요.")
+        st.link_button("투자 전략 페이지로 이동", "https://example.com", use_container_width=True)
+
+    elif selected_menu == "🛡️ 보장 분석":
+        st.header("빈틈없는 보장 분석")
+        st.write("현재 가입하신 보험을 분석하고 최적의 보장 플랜을 제안합니다.")
+        st.link_button("보장 분석 페이지로 이동", "https://example.com", use_container_width=True)
+
+    elif selected_menu == "📰 금융 자료실":
+        st.header("핵심 금융 자료실")
+        st.write("자산 관리에 도움이 되는 다양한 금융 정보와 칼럼을 읽어보세요.")
+        st.link_button("금융 자료실로 이동", "https://example.com", use_container_width=True)
+
+    elif selected_menu == "📞 고객 센터":
+        st.header("고객 센터")
+        st.write("궁금하신 점이 있다면 언제든 성남센터로 문의해 주세요.")
+        st.link_button("상담 예약 및 문의하기", "https://example.com", use_container_width=True)
+
+# 5. 로그인 상태에 따른 화면 분기
+if st.session_state['logged_in']:
+    main_app()
+else:
+    login_screen()
