@@ -12,7 +12,7 @@ def login_screen():
     st.markdown("""
         <div style="background-color: #002147; padding: 30px; border-radius: 15px; text-align: center; color: white; margin-bottom: 30px;">
             <h2>더블유에셋 성남센터</h2>
-            <p>서비스 이용을 위해 로그인이 필요합니다.</p>
+            <p>직원 전용 시스템입니다. 로그인해 주세요.</p>
         </div>
     """, unsafe_allow_html=True)
     
@@ -23,18 +23,32 @@ def login_screen():
         submit_button = st.form_submit_button("로그인", use_container_width=True)
 
         if submit_button:
-            # 시연을 위한 임시 계정 (추후 authenticator나 DB로 교체)
-            if user_id == "admin" and password == "1234":
+            # ==========================================
+            # 💡 [여기서 직원 아이디/비밀번호를 관리합니다]
+            # "아이디": "비밀번호" 형태로 계속 추가하시면 됩니다.
+            # ==========================================
+            valid_users = {
+                "admin": "1234",
+                "wa230962": "wa230962",
+                "guest": "guest",
+                "center_fc2": "pass2222",
+                "center_fc3": "pass3333"
+            }
+            
+            # 입력한 아이디가 valid_users 목록에 있고, 비밀번호도 일치하는지 확인 [cite: 278]
+            if user_id in valid_users and valid_users[user_id] == password:
                 st.session_state['logged_in'] = True
+                st.session_state['current_user'] = user_id # 접속한 사용자 아이디 저장
                 st.rerun() # 상태 업데이트 후 페이지 새로고침
             else:
                 st.error("아이디 또는 비밀번호가 일치하지 않습니다. 다시 확인해 주세요.")
 
 # 4. 메인 홈페이지 함수
 def main_app():
-    # 로그아웃 버튼 (사이드바에 배치)
+    # 사이드바 (로그아웃 버튼 및 환영 메시지)
     with st.sidebar:
-        st.write(f"반갑습니다, **고객님**!")
+        current_user = st.session_state.get('current_user', '직원')
+        st.write(f"반갑습니다, **{current_user}**님!")
         if st.button("로그아웃", use_container_width=True):
             st.session_state['logged_in'] = False
             st.rerun()
@@ -91,7 +105,7 @@ def main_app():
     </div>
     """, unsafe_allow_html=True)
     
-    # --- 탭 5개 추가 (총 7개) ---
+    # --- 탭 7개 구성 ---
     tab1, tab2, tab3, tab4, tab5, tab6, tab7 = st.tabs([
         "🏢 센터 소개", 
         "🚀 연금 시뮬레이터", 
@@ -112,7 +126,6 @@ def main_app():
         sim_url = "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/"
         st.link_button("연금 시뮬레이터 시작하기", sim_url, use_container_width=True)
 
-    # 새로 추가된 탭 내용 (링크 버튼 포함)
     with tab3:
         st.header("맞춤형 재무 설계")
         st.write("고객님의 라이프사이클에 맞춘 종합 재무 설계 서비스를 제공합니다.")
