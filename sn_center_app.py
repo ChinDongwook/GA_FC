@@ -42,9 +42,24 @@ def main_app():
     def inject_custom_css():
         st.markdown("""
         <style>
-        /* Pretendard 폰트 */
+        /* Pretendard 폰트 안전하게 적용 (아이콘 시스템과 충돌 방지) */
         @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-        html, body, [class*="st-"] { font-family: 'Pretendard', sans-serif !important; }
+        html, body, p, div, span, h1, h2, h3, h4, h5, h6, label { 
+            font-family: 'Pretendard', sans-serif !important; 
+        }
+
+        /* 💡 수정된 부분: 사이드바 열기/닫기 토글 화살표 버튼 강제 표시 */
+        [data-testid="collapsedControl"] {
+            color: #002147 !important;
+            display: flex !important;
+            z-index: 9999 !important;
+        }
+        [data-testid="collapsedControl"] svg, 
+        button[kind="header"] svg {
+            fill: #002147 !important;
+            color: #002147 !important;
+            visibility: visible !important;
+        }
 
         /* 히어로 섹션 */
         .hero-container { background-color: #002147; color: #FFFFFF; padding: 40px; border-radius: 15px; margin-bottom: 30px; }
@@ -52,15 +67,13 @@ def main_app():
         /* 버튼 */
         div.stLinkButton > a { background-color: #002147 !important; color: white !important; font-weight: 600 !important; }
         
-        /* 💡 수정된 부분: 라디오 버튼(동그라미) 영역을 보호하면서 글자만 안전하게 키우기 */
-        /* 메뉴 상단 메인 제목 (📌 센터 메뉴 이동) */
+        /* 라디오 버튼(동그라미) 영역을 보호하면서 글자만 안전하게 키우기 */
         div.stRadio > label {
             font-size: 20px !important;
             font-weight: 800 !important;
             color: #002147 !important;
             padding-bottom: 10px;
         }
-        /* 개별 라디오 항목 텍스트 (동그라미 버튼은 그대로 두고 텍스트만 조정) */
         div.stRadio p {
             font-size: 18px !important;
             font-weight: 600 !important;
@@ -125,30 +138,4 @@ def main_app():
     elif selected_menu == "📊 재무 설계":
         st.header("맞춤형 재무 설계")
         st.write("고객님의 라이프사이클에 맞춘 종합 재무 설계 서비스를 제공합니다.")
-        st.link_button("재무 설계 페이지로 이동", "https://example.com", use_container_width=True)
-
-    elif selected_menu == "📈 투자 전략":
-        st.header("최적의 투자 전략")
-        st.write("시장 트렌드를 반영한 포트폴리오 및 투자 전략을 확인하세요.")
-        st.link_button("투자 전략 페이지로 이동", "https://example.com", use_container_width=True)
-
-    elif selected_menu == "🛡️ 보장 분석":
-        st.header("빈틈없는 보장 분석")
-        st.write("현재 가입하신 보험을 분석하고 최적의 보장 플랜을 제안합니다.")
-        st.link_button("보장 분석 페이지로 이동", "https://example.com", use_container_width=True)
-
-    elif selected_menu == "📰 금융 자료실":
-        st.header("핵심 금융 자료실")
-        st.write("자산 관리에 도움이 되는 다양한 금융 정보와 칼럼을 읽어보세요.")
-        st.link_button("금융 자료실로 이동", "https://example.com", use_container_width=True)
-
-    elif selected_menu == "📞 고객 센터":
-        st.header("고객 센터")
-        st.write("궁금하신 점이 있다면 언제든 성남센터로 문의해 주세요.")
-        st.link_button("상담 예약 및 문의하기", "https://example.com", use_container_width=True)
-
-# 5. 로그인 상태에 따른 화면 분기
-if st.session_state['logged_in']:
-    main_app()
-else:
-    login_screen()
+        st.link_button("재무 설계 페이지로 이동", "https://example
