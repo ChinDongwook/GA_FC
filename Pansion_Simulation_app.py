@@ -39,6 +39,11 @@ st.set_page_config(
 # [핵심] 타이틀 텍스트 크기 축소 CSS
 st.markdown("""
     <style>
+    /* 수정된 부분: 콘텐츠 컨테이너 너비 제한 */
+    .block-container {
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+    }
     /* 타이틀(h1) 및 서브헤더(h3) 크기 조정 */
     h1 { font-size: 28px !important; }
     h3 { font-size: 20px !important; }
