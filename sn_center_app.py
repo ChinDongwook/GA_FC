@@ -11,17 +11,20 @@ if 'logged_in' not in st.session_state:
 def inject_custom_css():
     st.markdown("""
         <style>
-        /* 사이드바 폭을 전체 화면의 약 20% 수준으로 제한 (모바일 대응) */
+        /* 모바일 및 웹 환경에서 사이드바 폭을 약 20% 수준으로 제한 */
         [data-testid="stSidebar"] {
             min-width: 200px !important;
             max-width: 250px !important;
         }
-        /* 메인 컨테이너 스타일 */
+        /* 메인 화면 컨테이너 스타일 */
         [data-testid="stAppViewContainer"] {
             font-family: 'Pretendard', sans-serif !important;
         }
-        /* 기존 폰트 및 디자인 요소 */
-        .hero-container { background-color: #002147; color: #FFFFFF; padding: 20px; border-radius: 10px; }
+        /* 사이드바 토글 버튼 보호 */
+        [data-testid="collapsedControl"] {
+            color: #002147 !important;
+            z-index: 9999 !important;
+        }
         </style>
     """, unsafe_allow_html=True)
 
@@ -30,7 +33,7 @@ def safe_image(path, width=None, use_container_width=False):
     try:
         st.image(path, width=width, use_container_width=use_container_width)
     except Exception:
-        st.warning(f"이미지를 불러올 수 없습니다.")
+        st.warning(f"이미지를 불러올 수 없습니다. 경로를 확인하세요: {path}")
 
 # 5. 로그인 화면 함수
 def login_screen():
@@ -56,13 +59,16 @@ def main_app():
             st.session_state['logged_in'] = False
             st.rerun()
         st.markdown("---")
-        menu = st.radio("📌 메뉴", ["🏢 센터 소개", "🚀 연금 시뮬레이터"])
+        selected_menu = st.radio("📌 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터"])
     
     st.title("더블유에셋 성남센터")
-    if menu == "🏢 센터 소개":
+    if selected_menu == "🏢 센터 소개":
+        safe_image("images/main_banner.jpg", use_container_width=True)
         st.write("성남센터에 오신 것을 환영합니다.")
-    elif menu == "🚀 연금 시뮬레이터":
-        st.write("시뮬레이터 페이지입니다.")
+    elif selected_menu == "🚀 연금 시뮬레이터":
+        st.header("프리미엄 연금 시뮬레이터")
+        sim_url = "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/"
+        st.link_button("연금 시뮬레이터 시작하기", sim_url, use_container_width=True)
 
 # 7. 실행 분기
 if st.session_state['logged_in']:
