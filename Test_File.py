@@ -50,8 +50,8 @@ def inject_custom_css():
     
     /* 사이드바 개별 메뉴 항목 터치 간격 극대화 (상하 여백 추가 및 항목 간 마진 확대) */
     [data-testid="stSidebar"] div[role="radiogroup"] > label { 
-        padding-top: 12px !important;
-        padding-bottom: 12px !important; 
+        padding-top: 10px !important;
+        padding-bottom: 10px !important; 
         margin-bottom: 15px !important;
     }
     [data-testid="stSidebar"] div.stRadio p { font-size: 16px !important; }
