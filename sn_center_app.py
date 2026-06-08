@@ -7,41 +7,39 @@ st.set_page_config(page_title="더블유에셋 성남센터", layout="wide", pag
 if 'logged_in' not in st.session_state:
     st.session_state['logged_in'] = False
 
-# 3. CSS 스타일링 (텍스트 크기 최적화 및 겹침 방지)
+# 3. CSS 스타일링 (범위 한정 최적화)
 def inject_custom_css():
     st.markdown("""
     <style>
-    /* Pretendard 폰트 적용 */
-    @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
-    
-    /* 전체 폰트 및 테마 설정창 대응을 위해 !important 사용 최소화 */
-    html, body, [class*="st-"] { 
+    /* 💡 수정된 핵심 부분: 전역 태그 대신 메인 컨테이너로 범위 한정 */
+    [data-testid="stAppViewContainer"] { 
         font-family: 'Pretendard', sans-serif !important; 
     }
 
-    /* 사이드바 토글 버튼 강제 표시 */
+    /* 사이드바 토글 버튼 보호 */
     [data-testid="collapsedControl"] { display: flex !important; color: #002147 !important; }
 
     /* 히어로 섹션 */
-    .hero-container { background-color: #002147; color: #FFFFFF; padding: 30px; border-radius: 12px; margin-bottom: 20px; }
-
-    /* 타이틀 크기 조정 (기존보다 조금 더 컴팩트하게) */
-    h1 { font-size: 24px !important; margin-bottom: 5px !important; }
-    h2 { font-size: 18px !important; }
-
-    /* 본문 텍스트 겹침 방지 (폰트 크기 및 줄 높이 축소) */
-    .stMarkdown, .stWrite, p { 
-        font-size: 14px !important; 
+    .hero-container { background-color: #002147; color: #FFFFFF; padding: 25px; border-radius: 10px; margin-bottom: 20px; }
+    
+    /* 타이틀 및 헤더 (특정 위치만 지정) */
+    [data-testid="stAppViewContainer"] h1 { font-size: 26px !important; margin-bottom: 10px !important; }
+    [data-testid="stAppViewContainer"] h2 { font-size: 20px !important; }
+    
+    /* 본문 텍스트 (범위 한정) */
+    [data-testid="stAppViewContainer"] .stMarkdown, 
+    [data-testid="stAppViewContainer"] .stWrite, 
+    [data-testid="stAppViewContainer"] p { 
+        font-size: 15px !important; 
         line-height: 1.4 !important; 
-        margin-bottom: 5px !important;
     }
 
-    /* 사이드바 메뉴 폰트 및 정렬 */
-    div.stRadio > label { font-size: 16px !important; font-weight: 700 !important; color: #002147 !important; }
-    div.stRadio p { font-size: 14px !important; }
+    /* 사이드바 라디오 버튼 */
+    [data-testid="stSidebar"] div.stRadio > label { font-size: 17px !important; font-weight: 800 !important; color: #002147 !important; }
+    [data-testid="stSidebar"] div.stRadio p { font-size: 14px !important; }
 
     /* 버튼 스타일 */
-    div.stLinkButton > a { font-size: 13px !important; background-color: #002147 !important; color: white !important; font-weight: 600 !important; }
+    div.stLinkButton > a { font-size: 14px !important; background-color: #002147 !important; color: white !important; font-weight: 600 !important; }
     </style>
     """, unsafe_allow_html=True)
 
