@@ -45,9 +45,16 @@ def inject_custom_css():
         line-height: 1.4 !important; 
     }
 
-    /* 사이드바 메뉴 */
-    [data-testid="stSidebar"] div.stRadio > label { font-size: 17px !important; font-weight: 800 !important; color: #002147 !important; }
-    [data-testid="stSidebar"] div.stRadio p { font-size: 14px !important; }
+    /* 사이드바 메뉴 타이틀 및 간격 */
+    [data-testid="stSidebar"] div.stRadio > label { font-size: 17px !important; font-weight: 800 !important; color: #002147 !important; margin-bottom: 15px !important; }
+    
+    /* 사이드바 개별 메뉴 항목 터치 간격 극대화 (상하 여백 추가 및 항목 간 마진 확대) */
+    [data-testid="stSidebar"] div[role="radiogroup"] > label { 
+        padding-top: 10px !important;
+        padding-bottom: 10px !important; 
+        margin-bottom: 10px !important;
+    }
+    [data-testid="stSidebar"] div.stRadio p { font-size: 16px !important; }
 
     /* 버튼 스타일 */
     div.stLinkButton > a { font-size: 14px !important; background-color: #002147 !important; color: white !important; font-weight: 600 !important; }
@@ -110,7 +117,7 @@ def main_app():
         if st.button("로그아웃"):
             st.session_state['logged_in'] = False
             st.rerun()
-        selected_menu = st.radio(" 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
+        selected_menu = st.radio("📌 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
 
     # 로고 및 헤더
     safe_image("images/logo.png", width=100)
@@ -136,7 +143,7 @@ def main_app():
             st.markdown("<div style='font-size: 12px; line-height: 1.6; color: inherit;'>1. 우측 상단의 <b>메뉴</b>(점 3개) 버튼 터치<br>2. <b>'홈 화면에 추가'</b> 선택<br>3. 팝업창에서 <b>'추가'</b> 버튼 터치</div>", unsafe_allow_html=True)
             
     elif selected_menu == "🚀 연금 시뮬레이터":
-        st.header("프리미엄 연금 시뮬레이터")
+        st.header("최저보증 변액종신연금 시뮬레이터")
         st.link_button("시뮬레이터 시작하기", "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/")
     elif selected_menu == "📖 업무 매뉴얼":
         show_manual_page()
