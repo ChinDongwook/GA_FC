@@ -117,10 +117,25 @@ def main_app():
     st.markdown('<div class="hero-container"><h1>WASSET 성남센터</h1><p>성공적인 자산 관리를 위한 파트너</p></div>', unsafe_allow_html=True)
     
     # 메뉴별 내용
+# 메뉴별 내용
     if selected_menu == "🏢 센터 소개":
         safe_image("images/main_banner.jpg", use_container_width=True)
         st.header("성남센터에 오신 것을 환영합니다")
         st.write("전문적인 금융 컨설팅과 함께 안정적인 노후를 준비하세요.")
+        
+        # 스마트폰 앱 설치 안내 섹션 추가
+        st.markdown("---")
+        st.subheader("📱 스마트폰에 1초 만에 센터 앱 설치하기")
+        st.info("이 홈페이지를 스마트폰 바탕화면에 추가해두면 어플처럼 터치 한 번으로 접속할 수 있습니다.")
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("**🍎 아이폰 (Safari)**")
+            st.write("1. 화면 하단의 **공유**(네모에 화살표) 버튼 터치\n2. 메뉴를 위로 올려 **'홈 화면에 추가'** 선택\n3. 우측 상단 **'추가'** 버튼 터치")
+        with col2:
+            st.markdown("**🤖 안드로이드 (Chrome)**")
+            st.write("1. 우측 상단의 **메뉴**(점 3개) 버튼 터치\n2. **'홈 화면에 추가'** 선택\n3. 팝업창에서 **'추가'** 버튼 터치")
+            
     elif selected_menu == "🚀 연금 시뮬레이터":
         st.header("프리미엄 연금 시뮬레이터")
         st.link_button("시뮬레이터 시작하기", "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/")
