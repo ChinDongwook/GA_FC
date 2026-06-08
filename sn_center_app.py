@@ -110,7 +110,7 @@ def main_app():
         if st.button("로그아웃"):
             st.session_state['logged_in'] = False
             st.rerun()
-        selected_menu = st.radio("📌 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
+        selected_menu = st.radio(" 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
 
     # 로고 및 헤더
     safe_image("images/logo.png", width=100)
@@ -121,6 +121,20 @@ def main_app():
         safe_image("images/main_banner.jpg", use_container_width=True)
         st.header("성남센터에 오신 것을 환영합니다")
         st.write("전문적인 금융 컨설팅과 함께 안정적인 노후를 준비하세요.")
+        
+        # 스마트폰 앱 설치 안내 섹션 추가 (텍스트 크기 및 가독성 보완)
+        st.markdown("---")
+        st.markdown("<h3 style='font-size: 16px; font-weight: bold; color: inherit;'>📱 스마트폰에서 사용하기</h3>", unsafe_allow_html=True)
+        st.markdown("<div style='font-size: 13px; background-color: #e8f4f8; padding: 15px; border-radius: 8px; color: #002147; margin-bottom: 15px; border-left: 5px solid #002147;'>💡 이 홈페이지를 스마트폰 바탕화면에 추가해두면 어플처럼 터치 한 번으로 접속할 수 있습니다.</div>", unsafe_allow_html=True)
+        
+        col1, col2 = st.columns(2)
+        with col1:
+            st.markdown("<div style='font-size: 14px; font-weight: bold; margin-bottom: 8px; color: inherit;'>🍎 아이폰 (Safari)</div>", unsafe_allow_html=True)
+            st.markdown("<div style='font-size: 12px; line-height: 1.6; color: inherit;'>1. 화면 하단의 <b>공유</b>(네모에 화살표) 버튼 터치<br>2. 메뉴를 위로 올려 <b>'홈 화면에 추가'</b> 선택<br>3. 우측 상단 <b>'추가'</b> 버튼 터치</div>", unsafe_allow_html=True)
+        with col2:
+            st.markdown("<div style='font-size: 14px; font-weight: bold; margin-bottom: 8px; color: inherit;'>🤖 안드로이드 (Chrome)</div>", unsafe_allow_html=True)
+            st.markdown("<div style='font-size: 12px; line-height: 1.6; color: inherit;'>1. 우측 상단의 <b>메뉴</b>(점 3개) 버튼 터치<br>2. <b>'홈 화면에 추가'</b> 선택<br>3. 팝업창에서 <b>'추가'</b> 버튼 터치</div>", unsafe_allow_html=True)
+            
     elif selected_menu == "🚀 연금 시뮬레이터":
         st.header("프리미엄 연금 시뮬레이터")
         st.link_button("시뮬레이터 시작하기", "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/")
