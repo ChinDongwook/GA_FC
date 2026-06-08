@@ -143,7 +143,7 @@ def main_app():
             st.markdown("<div style='font-size: 12px; line-height: 1.6; color: inherit;'>1. 우측 상단의 <b>메뉴</b>(점 3개) 버튼 터치<br>2. <b>'홈 화면에 추가'</b> 선택<br>3. 팝업창에서 <b>'추가'</b> 버튼 터치</div>", unsafe_allow_html=True)
             
     elif selected_menu == "🚀 연금 시뮬레이터":
-        st.header("프리미엄 연금 시뮬레이터")
+        st.header("최저보증 변액종신연금 시뮬레이터")
         st.link_button("시뮬레이터 시작하기", "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/")
     elif selected_menu == "📖 업무 매뉴얼":
         show_manual_page()
