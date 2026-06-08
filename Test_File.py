@@ -52,7 +52,7 @@ def inject_custom_css():
     [data-testid="stSidebar"] div[role="radiogroup"] > label { 
         padding-top: 12px !important;
         padding-bottom: 12px !important; 
-        margin-bottom: 20px !important;
+        margin-bottom: 15px !important;
     }
     [data-testid="stSidebar"] div.stRadio p { font-size: 16px !important; }
 
