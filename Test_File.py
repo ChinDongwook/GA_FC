@@ -45,11 +45,15 @@ def inject_custom_css():
         line-height: 1.4 !important; 
     }
 
- /* 사이드바 메뉴 타이틀 및 간격 */
-    [data-testid="stSidebar"] div.stRadio > label { font-size: 17px !important; font-weight: 800 !important; color: #002147 !important; margin-bottom: 10px !important; }
+    /* 사이드바 메뉴 타이틀 및 간격 */
+    [data-testid="stSidebar"] div.stRadio > label { font-size: 17px !important; font-weight: 800 !important; color: #002147 !important; margin-bottom: 15px !important; }
     
-    /* 사이드바 개별 메뉴 항목 텍스트 크기 및 터치 간격 확대 */
-    [data-testid="stSidebar"] div[role="radiogroup"] > label { padding-bottom: 12px !important; }
+    /* 사이드바 개별 메뉴 항목 터치 간격 극대화 (상하 여백 추가 및 항목 간 마진 확대) */
+    [data-testid="stSidebar"] div[role="radiogroup"] > label { 
+        padding-top: 12px !important;
+        padding-bottom: 12px !important; 
+        margin-bottom: 20px !important;
+    }
     [data-testid="stSidebar"] div.stRadio p { font-size: 16px !important; }
 
     /* 버튼 스타일 */
@@ -113,7 +117,7 @@ def main_app():
         if st.button("로그아웃"):
             st.session_state['logged_in'] = False
             st.rerun()
-        selected_menu = st.radio(" 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
+        selected_menu = st.radio("📌 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
 
     # 로고 및 헤더
     safe_image("images/logo.png", width=100)
