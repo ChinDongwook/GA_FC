@@ -93,7 +93,10 @@ def login_screen():
         user_id = st.text_input("아이디")
         password = st.text_input("비밀번호", type="password")
         if st.form_submit_button("로그인", use_container_width=True):
-            valid_users = {"admin": "1234", "wa230962": "wa230962", "guest": "guest", "center_fc3": "pass3333"}
+            valid_users = {"admin": "1234", 
+                           "wa230962": "wa230962", 
+                           "guest": "guest", 
+                           "center_fc3": "pass3333"}
             if user_id in valid_users and valid_users[user_id] == password:
                 st.session_state['logged_in'] = True
                 st.session_state['current_user'] = user_id
@@ -110,7 +113,7 @@ def main_app():
         if st.button("로그아웃"):
             st.session_state['logged_in'] = False
             st.rerun()
-        selected_menu = st.radio("📌 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
+        selected_menu = st.radio("📌 센터 메뉴 이동", [" 센터 소개", " 연금 시뮬레이터", " 업무 매뉴얼", " 재무 설계", " 투자 전략", " 보장 분석"])
 
     # 로고 및 헤더
     safe_image("images/logo.png", width=100)
@@ -124,17 +127,18 @@ def main_app():
         st.write("전문적인 금융 컨설팅과 함께 안정적인 노후를 준비하세요.")
         
         # 스마트폰 앱 설치 안내 섹션 추가
+       # 스마트폰 앱 설치 안내 섹션 추가
         st.markdown("---")
-        st.subheader("📱 스마트폰에 1초 만에 센터 앱 설치하기")
-        st.info("이 홈페이지를 스마트폰 바탕화면에 추가해두면 어플처럼 터치 한 번으로 접속할 수 있습니다.")
+        st.markdown("<h3 style='font-size: 18px; font-weight: bold;'>📱 스마트폰에 1초 만에 센터 앱 설치하기</h3>", unsafe_allow_html=True)
+        st.markdown("<div style='font-size: 14px; background-color: #e8f4f8; padding: 15px; border-radius: 8px; color: #002147; margin-bottom: 15px;'>💡 이 홈페이지를 스마트폰 바탕화면에 추가해두면 어플처럼 터치 한 번으로 접속할 수 있습니다.</div>", unsafe_allow_html=True)
         
         col1, col2 = st.columns(2)
         with col1:
-            st.markdown("**🍎 아이폰 (Safari)**")
-            st.write("1. 화면 하단의 **공유**(네모에 화살표) 버튼 터치\n2. 메뉴를 위로 올려 **'홈 화면에 추가'** 선택\n3. 우측 상단 **'추가'** 버튼 터치")
+            st.markdown("<div style='font-size: 15px; font-weight: bold; margin-bottom: 8px;'>🍎 아이폰 (Safari)</div>", unsafe_allow_html=True)
+            st.markdown("<div style='font-size: 13px; line-height: 1.6;'>1. 화면 하단의 <b>공유</b>(네모에 화살표) 버튼 터치<br>2. 메뉴를 위로 올려 <b>'홈 화면에 추가'</b> 선택<br>3. 우측 상단 <b>'추가'</b> 버튼 터치</div>", unsafe_allow_html=True)
         with col2:
-            st.markdown("**🤖 안드로이드 (Chrome)**")
-            st.write("1. 우측 상단의 **메뉴**(점 3개) 버튼 터치\n2. **'홈 화면에 추가'** 선택\n3. 팝업창에서 **'추가'** 버튼 터치")
+            st.markdown("<div style='font-size: 15px; font-weight: bold; margin-bottom: 8px;'>🤖 안드로이드 (Chrome)</div>", unsafe_allow_html=True)
+            st.markdown("<div style='font-size: 13px; line-height: 1.6;'>1. 우측 상단의 <b>메뉴</b>(점 3개) 버튼 터치<br>2. <b>'홈 화면에 추가'</b> 선택<br>3. 팝업창에서 <b>'추가'</b> 버튼 터치</div>", unsafe_allow_html=True)
             
     elif selected_menu == "🚀 연금 시뮬레이터":
         st.header("프리미엄 연금 시뮬레이터")
