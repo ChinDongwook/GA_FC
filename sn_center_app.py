@@ -11,6 +11,12 @@ if 'logged_in' not in st.session_state:
 def inject_custom_css():
     st.markdown("""
     <style>
+    /* 사이드바 폭 축소 (모바일 및 데스크탑 대응) */
+    [data-testid="stSidebar"] {
+        min-width: 200px !important;
+        max-width: 250px !important;
+    }
+    
     /* 메인 화면 컨테이너로 범위 한정 (테마 설정창 겹침 방지) */
     [data-testid="stAppViewContainer"] { 
         font-family: 'Pretendard', sans-serif !important; 
