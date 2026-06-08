@@ -45,9 +45,12 @@ def inject_custom_css():
         line-height: 1.4 !important; 
     }
 
-    /* 사이드바 메뉴 */
-    [data-testid="stSidebar"] div.stRadio > label { font-size: 17px !important; font-weight: 800 !important; color: #002147 !important; }
-    [data-testid="stSidebar"] div.stRadio p { font-size: 14px !important; }
+ /* 사이드바 메뉴 타이틀 및 간격 */
+    [data-testid="stSidebar"] div.stRadio > label { font-size: 17px !important; font-weight: 800 !important; color: #002147 !important; margin-bottom: 10px !important; }
+    
+    /* 사이드바 개별 메뉴 항목 텍스트 크기 및 터치 간격 확대 */
+    [data-testid="stSidebar"] div[role="radiogroup"] > label { padding-bottom: 12px !important; }
+    [data-testid="stSidebar"] div.stRadio p { font-size: 16px !important; }
 
     /* 버튼 스타일 */
     div.stLinkButton > a { font-size: 14px !important; background-color: #002147 !important; color: white !important; font-weight: 600 !important; }
