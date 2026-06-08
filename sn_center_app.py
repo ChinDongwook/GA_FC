@@ -52,19 +52,18 @@ def main_app():
         /* 버튼 */
         div.stLinkButton > a { background-color: #002147 !important; color: white !important; font-weight: 600 !important; }
         
-        /* 💡 수정된 부분: 사이드바 라디오 버튼 UI 살리기 및 가독성 개선 */
-        /* 메뉴 제목 폰트 크기 및 색상 */
-        div.stRadio > div[role="radiogroup"] > label {
+        /* 💡 수정된 부분: 라디오 버튼(동그라미) 영역을 보호하면서 글자만 안전하게 키우기 */
+        /* 메뉴 상단 메인 제목 (📌 센터 메뉴 이동) */
+        div.stRadio > label {
             font-size: 20px !important;
             font-weight: 800 !important;
             color: #002147 !important;
             padding-bottom: 10px;
         }
-        /* 메뉴 하위 항목(라디오 버튼) 텍스트 스타일 */
-        div.stRadio > div[role="radiogroup"] p {
-            font-size: 16px !important;
+        /* 개별 라디오 항목 텍스트 (동그라미 버튼은 그대로 두고 텍스트만 조정) */
+        div.stRadio p {
+            font-size: 18px !important;
             font-weight: 600 !important;
-            margin: 0px !important;
         }
         </style>
         """, unsafe_allow_html=True)
