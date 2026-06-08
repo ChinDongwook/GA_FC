@@ -11,6 +11,11 @@ if 'logged_in' not in st.session_state:
 def inject_custom_css():
     st.markdown("""
     <style>
+    /* 수정된 부분: 콘텐츠 컨테이너 너비 제한 */
+    .block-container {
+        max-width: 1200px !important;
+        margin: 0 auto !important;
+    }
     /* 사이드바 폭 축소 (모바일 및 데스크탑 대응) */
     [data-testid="stSidebar"] {
         min-width: 200px !important;
