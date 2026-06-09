@@ -101,7 +101,10 @@ def login_screen():
         user_id = st.text_input("아이디")
         password = st.text_input("비밀번호", type="password")
         if st.form_submit_button("로그인", use_container_width=True):
-            valid_users = {"admin": "1234", "wa230962": "wa230962", "guest": "guest", "center_fc3": "pass3333"}
+            valid_users = {"admin": "1234", 
+                           "wa230962": "wa230962", 
+                           "guest": "guest", 
+                           "center_fc3": "pass3333"}
             if user_id in valid_users and valid_users[user_id] == password:
                 st.session_state['logged_in'] = True
                 st.session_state['current_user'] = user_id
@@ -122,7 +125,7 @@ def main_app():
                 st.rerun()
             menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"]
         else:
-            st.write("반갑습니다, **게스트**님!")
+            st.write("환영합니다, GUEST님!")
             menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "🔐 로그인"]
             
         selected_menu = st.radio("📌 센터 메뉴 이동", menu_options)
