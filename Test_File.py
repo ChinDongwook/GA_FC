@@ -152,9 +152,9 @@ def main_app():
             
     elif selected_menu == "🚀 연금 시뮬레이터":
         st.header("최저보증 변액종신연금 시뮬레이터")
-        # st.link_button 대신 HTML a 태그를 사용하여 현재 창(_self)에서 이동하도록 변경
+        # 리디렉션 오류 방지를 위해 target="_top" 적용
         st.markdown(
-            '<a href="https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/" target="_self" style="display: inline-block; padding: 10px 20px; background-color: #002147; color: white; text-align: center; text-decoration: none; font-size: 14px; border-radius: 8px; font-weight: 600;">시뮬레이터 시작하기</a>',
+            '<a href="https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/" target="_top" style="display: inline-block; padding: 10px 20px; background-color: #002147; color: white; text-align: center; text-decoration: none; font-size: 14px; border-radius: 8px; font-weight: 600;">시뮬레이터 시작하기</a>',
             unsafe_allow_html=True
         )
     elif selected_menu == "📖 업무 매뉴얼":
