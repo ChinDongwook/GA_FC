@@ -31,7 +31,7 @@ def create_pdf(current_age, final_reserve, monthly_pension):
 # --- [1] 페이지 기본 설정 ---
 st.set_page_config(
     page_title="최저보증 변액종신연금 컨설팅 시뮬레이터",
-    page_icon="프리미엄",
+    page_icon="최저보증 변액연금",
     layout="wide",
     initial_sidebar_state="expanded"
 )
@@ -107,7 +107,7 @@ st.markdown("---")
 t_prin, t_int, t_bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
 col1, col2, col3 = st.columns(3)
 col1.metric("총 납입 원금", f"{t_prin:,.0f} 만원")
-col2.metric(f"최종 연금 준비금 ({target_r_age}세)", f"{f_res:,.0f} 만원", f"수익 +{(t_int+t_bonus):,.0f} 만원")
+col2.metric(f"최종 연금 준비금 ({target_r_age}세)", f"{f_res:,.0f} 만원", f"누적이자 +{(t_int+t_bonus):,.0f} 만원")
 col3.metric("예상 월 수령액", f"{ann_pen/12:,.0f} 만원/월", f"연 {ann_pen:,.0f} 만원")
 
 st.markdown("<br>", unsafe_allow_html=True)
