@@ -101,10 +101,7 @@ def login_screen():
         user_id = st.text_input("아이디")
         password = st.text_input("비밀번호", type="password")
         if st.form_submit_button("로그인", use_container_width=True):
-            valid_users = {"admin": "1234", 
-                           "wa230962": "wa230962", 
-                           "guest": "guest", 
-                           "center_fc3": "pass3333"}
+            valid_users = {"admin": "1234", "wa230962": "wa230962", "guest": "guest", "center_fc3": "pass3333"}
             if user_id in valid_users and valid_users[user_id] == password:
                 st.session_state['logged_in'] = True
                 st.session_state['current_user'] = user_id
@@ -125,7 +122,7 @@ def main_app():
                 st.rerun()
             menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"]
         else:
-            st.write("환영합니다, GUEST님!")
+            st.write("반갑습니다, **게스트**님!")
             menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "🔐 로그인"]
             
         selected_menu = st.radio("📌 센터 메뉴 이동", menu_options)
@@ -155,11 +152,18 @@ def main_app():
             
     elif selected_menu == "🚀 연금 시뮬레이터":
         st.header("최저보증 변액종신연금 시뮬레이터")
-        st.link_button("시뮬레이터 시작하기", "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/")
+        # st.link_button 대신 HTML a 태그를 사용하여 현재 창(_self)에서 이동하도록 변경
+        st.markdown(
+            '<a href="https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/" target="_self" style="display: inline-block; padding: 10px 20px; background-color: #002147; color: white; text-align: center; text-decoration: none; font-size: 14px; border-radius: 8px; font-weight: 600;">시뮬레이터 시작하기</a>',
+            unsafe_allow_html=True
+        )
     elif selected_menu == "📖 업무 매뉴얼":
         show_manual_page()
     elif selected_menu == "🔐 로그인":
-        login_screen()
+        if not st.session_state['logged_in']:
+            login_screen()
+        else:
+            st.success(f"{st.session_state['current_user']}님, 이미 로그인 되어 있습니다.")
     else:
         st.header(selected_menu)
         st.write("관련 서비스를 준비 중입니다.")
