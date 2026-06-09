@@ -113,11 +113,16 @@ def main_app():
     inject_custom_css()
     
     with st.sidebar:
-        st.write(f"반갑습니다, **{st.session_state.get('current_user')}**님!")
-        if st.button("로그아웃"):
-            st.session_state['logged_in'] = False
-            st.rerun()
-        selected_menu = st.radio("📌 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"])
+        if st.session_state['logged_in']:
+            st.write(f"반갑습니다, **{st.session_state.get('current_user')}**님!")
+            if st.button("로그아웃"):
+                st.session_state['logged_in'] = False
+                st.session_state['current_user'] = "게스트"
+                st.rerun()
+        else:
+            st.write("반갑습니다, **게스트**님!")
+            
+        selected_menu = st.radio("📌 센터 메뉴 이동", ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석", "🔐 로그인"])
 
     # 로고 및 헤더
     safe_image("images/logo.png", width=100)
@@ -147,11 +152,14 @@ def main_app():
         st.link_button("시뮬레이터 시작하기", "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/")
     elif selected_menu == "📖 업무 매뉴얼":
         show_manual_page()
+    elif selected_menu == "🔐 로그인":
+        if not st.session_state['logged_in']:
+            login_screen()
+        else:
+            st.success(f"{st.session_state['current_user']}님, 이미 로그인 되어 있습니다.")
     else:
         st.header(selected_menu)
         st.write("관련 서비스를 준비 중입니다.")
 
-if st.session_state['logged_in']:
-    main_app()
-else:
-    login_screen()
+# 8. 앱 실행 (항상 main_app 실행)
+main_app()
