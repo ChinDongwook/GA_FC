@@ -30,9 +30,40 @@ def inject_custom_css():
         background-color: #070B11 !important;
         font-family: 'Pretendard', sans-serif !important;
     }
+    /* ── 상단 헤더 & 툴바 (다크 테마) ── */
     [data-testid="stHeader"] {
-        background-color: #E8EDF2 !important;
-        border-bottom: 1px solid #C9A84C !important;
+        background-color: #070B11 !important;
+        border-bottom: 1px solid #1E2D42 !important;
+    }
+    /* 햄버거/점세개 메뉴 아이콘 */
+    [data-testid="stHeader"] button,
+    [data-testid="stHeader"] svg,
+    [data-testid="stHeader"] span {
+        color: #8B9BB4 !important;
+        fill: #8B9BB4 !important;
+    }
+    [data-testid="stHeader"] button:hover svg,
+    [data-testid="stHeader"] button:hover span {
+        color: #C9A84C !important;
+        fill: #C9A84C !important;
+    }
+    /* Streamlit 상단 툴바 (Deploy 버튼 등) */
+    [data-testid="stToolbar"],
+    .stToolbar {
+        background-color: #070B11 !important;
+    }
+    [data-testid="stToolbar"] * {
+        color: #8B9BB4 !important;
+    }
+    /* 상단 데코 바 제거 */
+    #MainMenu, header[data-testid="stHeader"]::before {
+        background-color: #070B11 !important;
+    }
+    /* Streamlit 기본 상단 컬러 바 (빨간/주황 그라디언트) 덮기 */
+    [data-testid="stDecoration"],
+    .stDecoration {
+        background: linear-gradient(90deg, #001330, #C9A84C, #001330) !important;
+        height: 2px !important;
     }
 
     /* ── 사이드바 ── */
@@ -368,6 +399,76 @@ def inject_custom_css():
         background: #0D1A2E !important;
         border-left: 3px solid #C9A84C !important;
         border-radius: 6px !important;
+    }
+
+    /* ══════════════════════════════════════
+       라이트 모드 오버라이드
+       (Streamlit 설정창에서 Light 선택 시)
+    ══════════════════════════════════════ */
+    [data-theme="light"] .stApp,
+    [data-theme="light"] [data-testid="stApp"],
+    [data-theme="light"] [data-testid="stAppViewContainer"] {
+        background-color: #F4F1EA !important;
+    }
+    [data-theme="light"] [data-testid="stHeader"] {
+        background-color: #F4F1EA !important;
+        border-bottom: 1px solid #D4C5A0 !important;
+    }
+    [data-theme="light"] [data-testid="stDecoration"] {
+        background: linear-gradient(90deg, #001330, #C9A84C, #001330) !important;
+    }
+    [data-theme="light"] [data-testid="stSidebar"] {
+        background: linear-gradient(180deg, #001330 0%, #0A2342 100%) !important;
+    }
+    [data-theme="light"] .card {
+        background: #FFFFFF !important;
+        border-color: #E0D9CC !important;
+        box-shadow: 0 2px 16px rgba(0,19,48,0.08) !important;
+    }
+    [data-theme="light"] .card-title { color: #001330 !important; }
+    [data-theme="light"] .card-body  { color: #4A5568 !important; }
+    [data-theme="light"] .login-card {
+        background: #FFFFFF !important;
+        border-color: #E0D9CC !important;
+    }
+    [data-theme="light"] [data-testid="stAppViewContainer"] h1,
+    [data-theme="light"] [data-testid="stAppViewContainer"] h2 {
+        color: #001330 !important;
+    }
+    [data-theme="light"] [data-testid="stAppViewContainer"] p {
+        color: #2E3A4E !important;
+    }
+    [data-theme="light"] [data-testid="stExpander"] {
+        background: #FFFFFF !important;
+        border-color: #E0D9CC !important;
+    }
+    [data-theme="light"] [data-testid="stExpander"] summary {
+        color: #001330 !important;
+    }
+    [data-theme="light"] [data-testid="stTabs"] button {
+        color: #4A5568 !important;
+    }
+    [data-theme="light"] [data-testid="stTabs"] button[aria-selected="true"] {
+        color: #001330 !important;
+    }
+    [data-theme="light"] [data-testid="stHeader"] button svg,
+    [data-theme="light"] [data-testid="stHeader"] span {
+        color: #001330 !important;
+        fill: #001330 !important;
+    }
+    [data-theme="light"] table thead tr {
+        background: #001330 !important;
+    }
+    [data-theme="light"] table tbody tr:nth-child(even) {
+        background: #F8F5EE !important;
+    }
+    [data-theme="light"] table td,
+    [data-theme="light"] table th {
+        border-bottom-color: #E0D9CC !important;
+        color: #2E3A4E !important;
+    }
+    [data-theme="light"] .install-banner {
+        background: #001330 !important;
     }
     </style>
     """, unsafe_allow_html=True)
