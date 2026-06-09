@@ -23,12 +23,15 @@ def inject_custom_css():
     @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.css');
 
     /* ── 전체 배경 ── */
+    .stApp, [data-testid="stApp"] {
+        background-color: #070B11 !important;
+    }
     [data-testid="stAppViewContainer"] {
-        background-color: #F0EDE6 !important;
+        background-color: #070B11 !important;
         font-family: 'Pretendard', sans-serif !important;
     }
     [data-testid="stHeader"] {
-        background-color: #001330 !important;
+        background-color: #E8EDF2 !important;
         border-bottom: 1px solid #C9A84C !important;
     }
 
@@ -111,7 +114,7 @@ def inject_custom_css():
     /* ── 히어로 배너 ── */
     .hero-container {
         background: linear-gradient(135deg, #001330 0%, #0A2342 60%, #001a3a 100%);
-        color: #F0EDE6;
+        color: #D0D8E4;
         padding: 40px 48px;
         border-radius: 12px;
         margin-bottom: 32px;
@@ -152,7 +155,7 @@ def inject_custom_css():
         font-weight: 700;
         margin: 0 0 10px 0;
         line-height: 1.2;
-        color: #F0EDE6;
+        color: #D0D8E4;
     }
     .hero-sub {
         font-size: 15px;
@@ -165,7 +168,7 @@ def inject_custom_css():
     [data-testid="stAppViewContainer"] h1,
     [data-testid="stAppViewContainer"] h2 {
         font-family: 'Playfair Display', serif !important;
-        color: #001330 !important;
+        color: #E8EDF2 !important;
     }
     [data-testid="stAppViewContainer"] h1 { font-size: 28px !important; }
     [data-testid="stAppViewContainer"] h2 { font-size: 22px !important; }
@@ -179,7 +182,7 @@ def inject_custom_css():
     }
     [data-testid="stAppViewContainer"] p {
         font-size: 15px !important;
-        color: #2E3A4E !important;
+        color: #B8C4D0 !important;
         line-height: 1.65 !important;
     }
 
@@ -193,10 +196,10 @@ def inject_custom_css():
 
     /* ── 카드 ── */
     .card {
-        background: #FFFFFF;
+        background: #0D1520;
         border-radius: 10px;
         padding: 24px;
-        border: 1px solid #E8E4DC;
+        border: 1px solid #1E2D42;
         border-top: 3px solid #C9A84C;
         box-shadow: 0 2px 16px rgba(0,19,48,0.06);
         margin-bottom: 16px;
@@ -209,12 +212,12 @@ def inject_custom_css():
         font-family: 'Playfair Display', serif;
         font-size: 17px;
         font-weight: 600;
-        color: #001330;
+        color: #E8EDF2;
         margin-bottom: 6px;
     }
     .card-body {
         font-size: 14px;
-        color: #5A6675;
+        color: #7A90A8;
         line-height: 1.55;
     }
 
@@ -257,11 +260,11 @@ def inject_custom_css():
         font-family: 'Pretendard', sans-serif !important;
         font-size: 13px !important;
         font-weight: 600 !important;
-        color: #5A6675 !important;
+        color: #7A90A8 !important;
         letter-spacing: 0.03em !important;
     }
     [data-testid="stTabs"] button[aria-selected="true"] {
-        color: #001330 !important;
+        color: #E8EDF2 !important;
         border-bottom-color: #C9A84C !important;
     }
     [data-testid="stTabs"] [data-baseweb="tab-highlight"] {
@@ -270,20 +273,20 @@ def inject_custom_css():
 
     /* ── expander ── */
     [data-testid="stExpander"] {
-        border: 1px solid #E8E4DC !important;
+        border: 1px solid #1E2D42 !important;
         border-radius: 8px !important;
-        background: #FFFFFF !important;
+        background: #0D1520 !important;
     }
     [data-testid="stExpander"] summary {
         font-weight: 600 !important;
         font-size: 14px !important;
-        color: #001330 !important;
+        color: #D0D8E4 !important;
     }
 
     /* ── 링크 버튼 ── */
     div.stLinkButton > a {
         background: linear-gradient(135deg, #C9A84C, #b8943d) !important;
-        color: #001330 !important;
+        color: #E8EDF2 !important;
         font-weight: 700 !important;
         font-size: 14px !important;
         border-radius: 6px !important;
@@ -300,10 +303,10 @@ def inject_custom_css():
     .login-card {
         max-width: 400px;
         margin: 60px auto;
-        background: #FFFFFF;
+        background: #0D1520;
         border-radius: 12px;
         padding: 48px 40px;
-        border: 1px solid #E8E4DC;
+        border: 1px solid #1E2D42;
         border-top: 3px solid #C9A84C;
         box-shadow: 0 8px 40px rgba(0,19,48,0.10);
         text-align: center;
@@ -312,7 +315,7 @@ def inject_custom_css():
         font-family: 'Playfair Display', serif;
         font-size: 22px;
         font-weight: 700;
-        color: #001330;
+        color: #E8EDF2;
         margin-bottom: 4px;
     }
     .login-sub {
@@ -352,17 +355,17 @@ def inject_custom_css():
         color: #C9A84C !important;
     }
     [data-testid="stAppViewContainer"] tbody tr:nth-child(even) {
-        background: #F8F6F1 !important;
+        background: #0A1220 !important;
     }
     [data-testid="stAppViewContainer"] td, 
     [data-testid="stAppViewContainer"] th {
         padding: 10px 14px !important;
-        border-bottom: 1px solid #E8E4DC !important;
+        border-bottom: 1px solid #1E2D42 !important;
     }
 
     /* ── info/warning 박스 ── */
     [data-testid="stInfoBox"] {
-        background: #E8F0FC !important;
+        background: #0D1A2E !important;
         border-left: 3px solid #C9A84C !important;
         border-radius: 6px !important;
     }
@@ -383,7 +386,7 @@ def safe_image(path, width=None, use_container_width=False):
 # ─────────────────────────────────────────────
 def show_manual_page():
     st.markdown('<div class="hero-eyebrow" style="color:#C9A84C; font-size:11px; letter-spacing:0.2em; font-weight:700;">OPERATIONS</div>', unsafe_allow_html=True)
-    st.markdown('<h2 style="font-family:Playfair Display,serif; color:#001330; margin-bottom:4px;">업무 매뉴얼</h2>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-family:Playfair Display,serif; color:#E8EDF2; margin-bottom:4px;">업무 매뉴얼</h2>', unsafe_allow_html=True)
     st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
 
     tab_names = [
@@ -453,7 +456,7 @@ def main_app():
         # 로고 영역
         st.markdown("""
         <div style="padding: 20px 4px 16px 4px; border-bottom: 1px solid #C9A84C33; margin-bottom: 20px;">
-            <div style="font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:#F0EDE6; letter-spacing:0.04em;">W ASSET</div>
+            <div style="font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:#D0D8E4; letter-spacing:0.04em;">W ASSET</div>
             <div style="font-size:10px; color:#C9A84C; letter-spacing:0.18em; text-transform:uppercase; font-weight:600; margin-top:3px;">성남센터</div>
         </div>
         """, unsafe_allow_html=True)
@@ -499,7 +502,7 @@ def main_app():
         safe_image("images/main_banner.jpg", use_container_width=True)
 
         st.markdown('<div class="hero-eyebrow" style="color:#C9A84C; font-size:11px; letter-spacing:0.2em; font-weight:700;">ABOUT US</div>', unsafe_allow_html=True)
-        st.markdown('<h2 style="font-family:Playfair Display,serif; color:#001330; margin-bottom:4px;">성남센터 소개</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 style="font-family:Playfair Display,serif; color:#E8EDF2; margin-bottom:4px;">성남센터 소개</h2>', unsafe_allow_html=True)
         st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
         st.write("전문적인 금융 컨설팅과 함께 안정적인 노후를 설계하세요. 더블유에셋 성남센터는 고객 한 분 한 분의 자산 목표에 맞춘 맞춤형 솔루션을 제공합니다.")
 
@@ -551,7 +554,7 @@ def main_app():
 
     elif selected_menu == "🚀 연금 시뮬레이터":
         st.markdown('<div class="hero-eyebrow" style="color:#C9A84C; font-size:11px; letter-spacing:0.2em; font-weight:700;">TOOLS</div>', unsafe_allow_html=True)
-        st.markdown('<h2 style="font-family:Playfair Display,serif; color:#001330; margin-bottom:4px;">연금 시뮬레이터</h2>', unsafe_allow_html=True)
+        st.markdown('<h2 style="font-family:Playfair Display,serif; color:#E8EDF2; margin-bottom:4px;">연금 시뮬레이터</h2>', unsafe_allow_html=True)
         st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
 
         st.markdown("""
@@ -571,7 +574,7 @@ def main_app():
 
     else:
         st.markdown(f'<div class="hero-eyebrow" style="color:#C9A84C; font-size:11px; letter-spacing:0.2em; font-weight:700;">COMING SOON</div>', unsafe_allow_html=True)
-        st.markdown(f'<h2 style="font-family:Playfair Display,serif; color:#001330;">{selected_menu}</h2>', unsafe_allow_html=True)
+        st.markdown(f'<h2 style="font-family:Playfair Display,serif; color:#E8EDF2;">{selected_menu}</h2>', unsafe_allow_html=True)
         st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
         st.markdown("""
         <div class="card" style="max-width:480px;">
