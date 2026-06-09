@@ -402,75 +402,150 @@ def inject_custom_css():
     }
 
     /* ══════════════════════════════════════
-       라이트 모드 오버라이드
-       (Streamlit 설정창에서 Light 선택 시)
+       라이트 모드 — body.light-mode 클래스 기반
     ══════════════════════════════════════ */
-    [data-theme="light"] .stApp,
-    [data-theme="light"] [data-testid="stApp"],
-    [data-theme="light"] [data-testid="stAppViewContainer"] {
+    body.light-mode .stApp,
+    body.light-mode [data-testid="stAppViewContainer"] {
         background-color: #F4F1EA !important;
     }
-    [data-theme="light"] [data-testid="stHeader"] {
+    body.light-mode [data-testid="stHeader"] {
         background-color: #F4F1EA !important;
         border-bottom: 1px solid #D4C5A0 !important;
     }
-    [data-theme="light"] [data-testid="stDecoration"] {
+    body.light-mode [data-testid="stHeader"] button svg,
+    body.light-mode [data-testid="stHeader"] span {
+        color: #001330 !important;
+        fill: #001330 !important;
+    }
+    body.light-mode [data-testid="stDecoration"] {
         background: linear-gradient(90deg, #001330, #C9A84C, #001330) !important;
     }
-    [data-theme="light"] [data-testid="stSidebar"] {
+    /* 사이드바는 항상 네이비 유지 */
+    body.light-mode [data-testid="stSidebar"] {
         background: linear-gradient(180deg, #001330 0%, #0A2342 100%) !important;
     }
-    [data-theme="light"] .card {
+    body.light-mode .card {
         background: #FFFFFF !important;
         border-color: #E0D9CC !important;
         box-shadow: 0 2px 16px rgba(0,19,48,0.08) !important;
     }
-    [data-theme="light"] .card-title { color: #001330 !important; }
-    [data-theme="light"] .card-body  { color: #4A5568 !important; }
-    [data-theme="light"] .login-card {
+    body.light-mode .card-title { color: #001330 !important; }
+    body.light-mode .card-body  { color: #4A5568 !important; }
+    body.light-mode .login-card {
         background: #FFFFFF !important;
         border-color: #E0D9CC !important;
     }
-    [data-theme="light"] [data-testid="stAppViewContainer"] h1,
-    [data-theme="light"] [data-testid="stAppViewContainer"] h2 {
+    body.light-mode .login-logo-text { color: #001330 !important; }
+    body.light-mode [data-testid="stAppViewContainer"] h1,
+    body.light-mode [data-testid="stAppViewContainer"] h2 {
         color: #001330 !important;
     }
-    [data-theme="light"] [data-testid="stAppViewContainer"] p {
+    body.light-mode [data-testid="stAppViewContainer"] p {
         color: #2E3A4E !important;
     }
-    [data-theme="light"] [data-testid="stExpander"] {
+    body.light-mode [data-testid="stExpander"] {
         background: #FFFFFF !important;
         border-color: #E0D9CC !important;
     }
-    [data-theme="light"] [data-testid="stExpander"] summary {
+    body.light-mode [data-testid="stExpander"] summary {
         color: #001330 !important;
     }
-    [data-theme="light"] [data-testid="stTabs"] button {
+    body.light-mode [data-testid="stTabs"] button {
         color: #4A5568 !important;
     }
-    [data-theme="light"] [data-testid="stTabs"] button[aria-selected="true"] {
+    body.light-mode [data-testid="stTabs"] button[aria-selected="true"] {
         color: #001330 !important;
     }
-    [data-theme="light"] [data-testid="stHeader"] button svg,
-    [data-theme="light"] [data-testid="stHeader"] span {
-        color: #001330 !important;
-        fill: #001330 !important;
-    }
-    [data-theme="light"] table thead tr {
+    body.light-mode [data-testid="stAppViewContainer"] table thead tr {
         background: #001330 !important;
     }
-    [data-theme="light"] table tbody tr:nth-child(even) {
+    body.light-mode [data-testid="stAppViewContainer"] tbody tr:nth-child(even) {
         background: #F8F5EE !important;
     }
-    [data-theme="light"] table td,
-    [data-theme="light"] table th {
+    body.light-mode [data-testid="stAppViewContainer"] td,
+    body.light-mode [data-testid="stAppViewContainer"] th {
         border-bottom-color: #E0D9CC !important;
         color: #2E3A4E !important;
     }
-    [data-theme="light"] .install-banner {
+    body.light-mode [data-testid="stInfoBox"] {
+        background: #FFF8EC !important;
+    }
+    body.light-mode .install-banner {
         background: #001330 !important;
     }
+    body.light-mode .hero-container {
+        background: linear-gradient(135deg, #001330 0%, #0A2342 60%, #001a3a 100%) !important;
+    }
+    body.light-mode .gold-divider {
+        background: linear-gradient(90deg, #C9A84C, #C9A84C88, transparent) !important;
+    }
+    
     </style>
+    """, unsafe_allow_html=True)
+
+
+# ─────────────────────────────────────────────
+# JS: Streamlit 테마 감지 → body 클래스 토글
+# ─────────────────────────────────────────────
+def inject_theme_detector():
+    st.markdown(r"""
+    <script>
+    (function() {
+        function getStreamlitTheme() {
+            // Streamlit은 라이트 모드일 때 --background-color 가 밝은 값
+            const style = getComputedStyle(document.body);
+            const bg = style.getPropertyValue('--background-color').trim();
+            if (!bg) {
+                // CSS 변수 없으면 실제 배경색으로 판단
+                const appEl = document.querySelector('[data-testid="stAppViewContainer"]');
+                if (!appEl) return 'dark';
+                const appBg = getComputedStyle(appEl).backgroundColor;
+                const rgb = appBg.match(/\d+/g);
+                if (!rgb) return 'dark';
+                const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
+                return brightness > 128 ? 'light' : 'dark';
+            }
+            // hex 또는 rgb 값으로 밝기 판단
+            let r, g, b;
+            if (bg.startsWith('#')) {
+                const hex = bg.replace('#','');
+                r = parseInt(hex.substr(0,2),16);
+                g = parseInt(hex.substr(2,2),16);
+                b = parseInt(hex.substr(4,2),16);
+            } else {
+                const rgb = bg.match(/\d+/g);
+                if (!rgb) return 'dark';
+                [r,g,b] = rgb.map(Number);
+            }
+            const brightness = (r*299 + g*587 + b*114) / 1000;
+            return brightness > 128 ? 'light' : 'dark';
+        }
+
+        function applyTheme() {
+            const theme = getStreamlitTheme();
+            if (theme === 'light') {
+                document.body.classList.add('light-mode');
+            } else {
+                document.body.classList.remove('light-mode');
+            }
+        }
+
+        // 초기 적용
+        applyTheme();
+
+        // MutationObserver로 Streamlit 테마 변경 감지
+        const observer = new MutationObserver(function(mutations) {
+            applyTheme();
+        });
+        observer.observe(document.documentElement, {
+            attributes: true,
+            attributeFilter: ['data-theme', 'style', 'class'],
+            subtree: false
+        });
+        // 주기적으로도 체크 (Streamlit 내부 변경 대응)
+        setInterval(applyTheme, 800);
+    })();
+    </script>
     """, unsafe_allow_html=True)
 
 # ─────────────────────────────────────────────
@@ -551,6 +626,7 @@ def login_screen():
 # ─────────────────────────────────────────────
 def main_app():
     inject_custom_css()
+    inject_theme_detector()
 
     # ── 사이드바 ──────────────────────────────
     with st.sidebar:
