@@ -238,6 +238,11 @@ def inject_custom_css():
         border-top: 3px solid #C9A84C;
         box-shadow: 0 2px 16px rgba(0,19,48,0.06);
         margin-bottom: 16px;
+        transition: transform 0.2s ease, border-color 0.2s ease;
+    }
+    .card:hover {
+        border-color: #C9A84C;
+        transform: translateY(-2px);
     }
     .card-icon {
         font-size: 28px;
@@ -604,6 +609,7 @@ def login_screen():
         with st.form("login_form"):
             user_id  = st.text_input("아이디", placeholder="아이디를 입력하세요")
             password = st.text_input("비밀번호", type="password", placeholder="비밀번호를 입력하세요")
+            save_info = st.checkbox("✅ 아이디/비밀번호 저장")
             submitted = st.form_submit_button("로그인", use_container_width=True)
 
         if submitted:
@@ -616,9 +622,50 @@ def login_screen():
             if user_id in valid_users and valid_users[user_id] == password:
                 st.session_state["logged_in"] = True
                 st.session_state["current_user"] = user_id
+                
+                # 저장 옵션 선택 여부에 따라 세션에 임시 플래그 저장
+                if save_info:
+                    st.session_state["save_creds"] = {"id": user_id, "pw": password}
+                else:
+                    st.session_state["clear_creds"] = True
+                    
                 st.rerun()
             else:
                 st.error("아이디 또는 비밀번호가 일치하지 않습니다.")
+
+    # [핵심] 로그인 화면이 렌더링될 때 로컬 스토리지에 저장된 자격증명이 있다면 자동 입력
+    components.html("""
+    <script>
+    (function() {
+        setTimeout(() => {
+            try {
+                const parentDoc = window.parent.document;
+                const id = window.parent.localStorage.getItem('wa_id');
+                const pw = window.parent.localStorage.getItem('wa_pw');
+                
+                if (id && pw) {
+                    const idInput = parentDoc.querySelector('input[placeholder="아이디를 입력하세요"]');
+                    const pwInput = parentDoc.querySelector('input[placeholder="비밀번호를 입력하세요"]');
+                    const checkbox = parentDoc.querySelector('input[type="checkbox"]');
+
+                    // React 기반의 Streamlit 입력창에 값을 강제로 주입하고 이벤트를 발생시키는 함수
+                    function setReactValue(element, value) {
+                        const valueSetter = Object.getOwnPropertyDescriptor(window.HTMLInputElement.prototype, 'value').set;
+                        valueSetter.call(element, value);
+                        element.dispatchEvent(new Event('input', { bubbles: true }));
+                    }
+
+                    if (idInput && idInput.value === '') setReactValue(idInput, id);
+                    if (pwInput && pwInput.value === '') setReactValue(pwInput, pw);
+                    
+                    // 체크박스 자동 선택
+                    if (checkbox && !checkbox.checked) checkbox.click();
+                }
+            } catch(e) {}
+        }, 300);
+    })();
+    </script>
+    """, height=0, width=0)
 
 # ─────────────────────────────────────────────
 # 7. 메인 앱
@@ -626,6 +673,29 @@ def login_screen():
 def main_app():
     inject_custom_css()
     inject_theme_detector()
+
+    # ─────────────────────────────────────────────
+    # [핵심] 로그인 성공 직후 로컬 스토리지 처리 로직
+    # ─────────────────────────────────────────────
+    if st.session_state.get("save_creds"):
+        id_val = st.session_state["save_creds"]["id"]
+        pw_val = st.session_state["save_creds"]["pw"]
+        components.html(f"""
+            <script>
+                window.parent.localStorage.setItem('wa_id', '{id_val}');
+                window.parent.localStorage.setItem('wa_pw', '{pw_val}');
+            </script>
+        """, height=0, width=0)
+        del st.session_state["save_creds"]
+
+    if st.session_state.get("clear_creds"):
+        components.html("""
+            <script>
+                window.parent.localStorage.removeItem('wa_id');
+                window.parent.localStorage.removeItem('wa_pw');
+            </script>
+        """, height=0, width=0)
+        del st.session_state["clear_creds"]
 
     # ── 사이드바 ──────────────────────────────
     with st.sidebar:
@@ -648,7 +718,9 @@ def main_app():
                 st.session_state["current_user"] = "게스트"
                 st.rerun()
             st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
-            menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📊 재무 설계", "📈 투자 전략", "🛡️ 보장 분석"]
+            
+            # 사이드바에서 혼동을 주던 임시 메뉴를 제거하고 본질적인 메뉴만 남김
+            menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼"]
         else:
             st.markdown('<div style="font-size:12px; color:#8B9BB4; padding:0 4px; margin-bottom:12px;">게스트 접속 중</div>', unsafe_allow_html=True)
             st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
@@ -687,23 +759,41 @@ def main_app():
         st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
         st.write("전문적인 금융 컨설팅과 함께 안정적인 노후를 설계하세요. 더블유에셋 성남센터는 고객 한 분 한 분의 자산 목표에 맞춘 맞춤형 솔루션을 제공합니다.")
 
-        # 서비스 카드
+        # 서비스 카드 (변경 사항 적용부)
         st.markdown("<br>", unsafe_allow_html=True)
         col1, col2, col3 = st.columns(3)
+        
+        # 실제 사용하실 웹 주소로 URL 부분을 교체해주시면 됩니다.
         cards = [
-            ("💼", "재무 설계", "고객의 생애 주기에 맞는 체계적인 자산 포트폴리오를 설계합니다."),
-            ("📈", "투자 전략", "시장 분석을 바탕으로 리스크를 관리하며 수익을 극대화합니다."),
-            ("🛡️", "보장 분석", "예상치 못한 위험으로부터 소중한 자산을 안전하게 지킵니다."),
+            ("💻", "더블유에셋 와인전산", "W-ASSET 통합 영업지원 및 고객관리 전산 시스템으로 이동합니다.", "https://wain.pro/main/login.php"),
+            ("📊", "보험료비교", "각 보험사별 보험료 및 보장 내역을 한눈에 비교 분석합니다.", "https://wasset.bojang114.com/index.html"),
+            ("📞", "성남센터 담당자 연락처", "성남센터 업무 지원 담당자들의 직통 연락처를 확인합니다.", "https://1drv.ms/x/s!AlR14lQpgByxicpNy0wban95etJr6A?e=lRm8wg")
         ]
-        for col, (icon, title, body) in zip([col1, col2, col3], cards):
+        
+        is_logged_in = st.session_state.get("logged_in", False)
+
+        for col, (icon, title, body, link) in zip([col1, col2, col3], cards):
             with col:
-                st.markdown(f"""
-                <div class="card">
-                    <div class="card-icon">{icon}</div>
-                    <div class="card-title">{title}</div>
-                    <div class="card-body">{body}</div>
-                </div>
-                """, unsafe_allow_html=True)
+                if is_logged_in:
+                    # 로그인 성공 상태: <a> 태그를 이용해 카드 클릭 시 새 창에서 열리도록 구현
+                    st.markdown(f"""
+                    <a href="{link}" target="_blank" style="text-decoration: none;">
+                        <div class="card" style="cursor: pointer;">
+                            <div class="card-icon">{icon}</div>
+                            <div class="card-title" style="color: #C9A84C;">{title} ↗</div>
+                            <div class="card-body">{body}</div>
+                        </div>
+                    </a>
+                    """, unsafe_allow_html=True)
+                else:
+                    # 미로그인 상태: 링크 비활성화, 시각적 잠금(opacity) 처리
+                    st.markdown(f"""
+                    <div class="card" style="opacity: 0.75;">
+                        <div class="card-icon">{icon}</div>
+                        <div class="card-title">{title}</div>
+                        <div class="card-body">{body}<br><br><span style="color:#C9A84C; font-size:12px; font-weight:600;">🔒 로그인 후 이용 가능</span></div>
+                    </div>
+                    """, unsafe_allow_html=True)
 
         # 앱 설치 안내
         st.markdown("""
