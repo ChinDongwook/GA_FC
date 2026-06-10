@@ -12,6 +12,10 @@ if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
     st.session_state["current_user"] = "게스트"
 
+# 테마 변경 시 페이지 유지를 위한 세션 상태 초기화
+if "menu_page" not in st.session_state:
+    st.session_state["menu_page"] = "🏢 센터 소개"
+
 # ─────────────────────────────────────────────
 # 3. CSS — 다크 네이비 + 골드 고급 금융사 테마
 # ─────────────────────────────────────────────
@@ -402,7 +406,7 @@ def inject_custom_css():
     }
 
     /* ══════════════════════════════════════
-       라이트 모드 — body.light-mode 클래스 기반
+        라이트 모드 — body.light-mode 클래스 기반
     ══════════════════════════════════════ */
     body.light-mode .stApp,
     body.light-mode [data-testid="stAppViewContainer"] {
@@ -655,7 +659,12 @@ def main_app():
             st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
             menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "🔐 로그인"]
 
-        selected_menu = st.radio("MENU", menu_options)
+        # 로그인/로그아웃으로 인해 선택되었던 메뉴가 사라질 경우를 대비한 안전 장치
+        if st.session_state["menu_page"] not in menu_options:
+            st.session_state["menu_page"] = menu_options[0]
+
+        # key 속성을 지정하여 테마 변경 등의 리프레시에도 상태를 보존
+        selected_menu = st.radio("MENU", menu_options, key="menu_page")
 
         # 사이드바 하단 버전
         st.markdown("""
