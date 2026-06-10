@@ -634,6 +634,9 @@ def login_screen():
             else:
                 st.error("아이디 또는 비밀번호가 일치하지 않습니다.")
 
+        # 로그인 폼 하단에 추가 안내 문구 배치
+        st.info("💡 아이디/비번은 사번과 동일합니다. 사번으로 로그인 후 업무메뉴 이용 가능합니다.")
+
     # [핵심] 로그인 화면이 렌더링될 때 로컬 스토리지에 저장된 자격증명이 있다면 자동 입력
     components.html("""
     <script>
@@ -790,13 +793,15 @@ def main_app():
                     </a>
                     """, unsafe_allow_html=True)
                 else:
-                    # 미로그인 상태: 링크 비활성화, 시각적 잠금(opacity) 처리
+                    # 미로그인 상태: 클릭 시 가장 간결한 JS 팝업(alert) 알림 처리
                     st.markdown(f"""
-                    <div class="card" style="opacity: 0.75;">
-                        <div class="card-icon">{icon}</div>
-                        <div class="card-title">{title}</div>
-                        <div class="card-body">{body}<br><br><span style="color:#C9A84C; font-size:12px; font-weight:600;">🔒 로그인 후 이용 가능</span></div>
-                    </div>
+                    <a href="javascript:void(0);" onclick="alert('로그인 후 이용해주세요');" style="text-decoration: none;">
+                        <div class="card" style="opacity: 0.75; cursor: pointer;">
+                            <div class="card-icon">{icon}</div>
+                            <div class="card-title">{title}</div>
+                            <div class="card-body">{body}<br><br><span style="color:#C9A84C; font-size:12px; font-weight:600;">🔒 로그인 후 이용 가능</span></div>
+                        </div>
+                    </a>
                     """, unsafe_allow_html=True)
 
         # 앱 설치 안내
