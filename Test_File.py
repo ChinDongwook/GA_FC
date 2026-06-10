@@ -678,4 +678,186 @@ def main_app():
     # ─────────────────────────────────────────────
     # [핵심] 로그인 성공 직후 로컬 스토리지 처리 로직
     # ─────────────────────────────────────────────
-    if st.session_
+    if st.session_state.get("save_creds"):
+        id_val = st.session_state["save_creds"]["id"]
+        pw_val = st.session_state["save_creds"]["pw"]
+        components.html(f"""
+            <script>
+                window.parent.localStorage.setItem('wa_id', '{id_val}');
+                window.parent.localStorage.setItem('wa_pw', '{pw_val}');
+            </script>
+        """, height=0, width=0)
+        del st.session_state["save_creds"]
+
+    if st.session_state.get("clear_creds"):
+        components.html("""
+            <script>
+                window.parent.localStorage.removeItem('wa_id');
+                window.parent.localStorage.removeItem('wa_pw');
+            </script>
+        """, height=0, width=0)
+        del st.session_state["clear_creds"]
+
+    # ── 사이드바 ──────────────────────────────
+    with st.sidebar:
+        # 로고 영역
+        st.markdown("""
+        <div style="padding: 20px 4px 16px 4px; border-bottom: 1px solid #C9A84C33; margin-bottom: 20px;">
+            <div style="font-family:'Playfair Display',serif; font-size:20px; font-weight:700; color:#D0D8E4; letter-spacing:0.04em;">W ASSET</div>
+            <div style="font-size:10px; color:#C9A84C; letter-spacing:0.18em; text-transform:uppercase; font-weight:600; margin-top:3px;">성남센터</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+        if st.session_state["logged_in"]:
+            st.markdown(f"""
+            <div style="font-size:12px; color:#8B9BB4; margin-bottom:6px; padding:0 4px;">
+                <span style="color:#C9A84C;">●</span>&nbsp;&nbsp;{st.session_state.get('current_user')}
+            </div>
+            """, unsafe_allow_html=True)
+            if st.button("로그아웃"):
+                st.session_state["logged_in"] = False
+                st.session_state["current_user"] = "게스트"
+                st.rerun()
+            st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
+            
+            # 사이드바에서 혼동을 주던 임시 메뉴를 제거하고 본질적인 메뉴만 남김
+            menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼"]
+        else:
+            st.markdown('<div style="font-size:12px; color:#8B9BB4; padding:0 4px; margin-bottom:12px;">게스트 접속 중</div>', unsafe_allow_html=True)
+            st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
+            menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "🔐 로그인"]
+
+        # 로그인/로그아웃으로 인해 선택되었던 메뉴가 사라질 경우를 대비한 안전 장치
+        if st.session_state["menu_page"] not in menu_options:
+            st.session_state["menu_page"] = menu_options[0]
+
+        # key 속성을 지정하여 테마 변경 등의 리프레시에도 상태를 보존
+        selected_menu = st.radio("MENU", menu_options, key="menu_page")
+
+        # 사이드바 하단 현재 시간 표시 (한국 표준시 기준)
+        now_kst = datetime.datetime.utcnow() + datetime.timedelta(hours=9)
+        time_str = now_kst.strftime("%Y년 %m월 %d일 %H:%M")
+
+        st.markdown(f"""
+        <div style="position:absolute; bottom:24px; left:0; right:0; text-align:center;">
+            <div style="font-size:11px; color:#8B9BB4; letter-spacing:0.05em;">{time_str}</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    # ── 히어로 배너 ───────────────────────────
+    safe_image("images/logo.png", width=80)
+    st.markdown("""
+    <div class="hero-container">
+        <div class="hero-eyebrow">WASSET SUNGNAM CENTER</div>
+        <div class="hero-title">더블유에셋 성남센터</div>
+        <p class="hero-sub">신뢰와 전문성으로 함께하는 자산관리 파트너</p>
+    </div>
+    """, unsafe_allow_html=True)
+
+    # ── 메뉴 분기 ──────────────────────────────
+    if selected_menu == "🏢 센터 소개":
+        safe_image("images/main_banner.jpg", use_container_width=True)
+
+        st.markdown('<div class="hero-eyebrow" style="color:#C9A84C; font-size:11px; letter-spacing:0.2em; font-weight:700;">ABOUT US</div>', unsafe_allow_html=True)
+        st.markdown('<h2 style="font-family:Playfair Display,serif; color:#E8EDF2; margin-bottom:4px;">성남센터 소개</h2>', unsafe_allow_html=True)
+        st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
+        st.write("전문적인 금융 컨설팅과 함께 안정적인 노후를 설계하세요. 더블유에셋 성남센터는 고객 한 분 한 분의 자산 목표에 맞춘 맞춤형 솔루션을 제공합니다.")
+
+        # 서비스 카드 (변경 사항 적용부)
+        st.markdown("<br>", unsafe_allow_html=True)
+        col1, col2, col3 = st.columns(3)
+        
+        # 실제 사용하실 웹 주소로 URL 부분을 교체해주시면 됩니다.
+        cards = [
+            ("💻", "더블유에셋 와인전산", "W-ASSET 통합 영업지원 및 고객관리 전산 시스템으로 이동합니다.", "https://wine.w-asset.co.kr/"),
+            ("📊", "보험료비교", "각 보험사별 보험료 및 보장 내역을 한눈에 비교 분석합니다.", "https://www.w-asset.co.kr/"),
+            ("📞", "성남센터 담당자 연락처", "성남센터 업무 지원 담당자들의 직통 연락처를 확인합니다.", "https://www.w-asset.co.kr/")
+        ]
+        
+        is_logged_in = st.session_state.get("logged_in", False)
+
+        for col, (icon, title, body, link) in zip([col1, col2, col3], cards):
+            with col:
+                if is_logged_in:
+                    # 로그인 성공 상태: <a> 태그를 이용해 카드 클릭 시 새 창에서 열리도록 구현
+                    st.markdown(f"""
+                    <a href="{link}" target="_blank" style="text-decoration: none;">
+                        <div class="card" style="cursor: pointer;">
+                            <div class="card-icon">{icon}</div>
+                            <div class="card-title" style="color: #C9A84C;">{title} ↗</div>
+                            <div class="card-body">{body}</div>
+                        </div>
+                    </a>
+                    """, unsafe_allow_html=True)
+                else:
+                    # 미로그인 상태: 링크 비활성화, 시각적 잠금(opacity) 처리
+                    st.markdown(f"""
+                    <div class="card" style="opacity: 0.75;">
+                        <div class="card-icon">{icon}</div>
+                        <div class="card-title">{title}</div>
+                        <div class="card-body">{body}<br><br><span style="color:#C9A84C; font-size:12px; font-weight:600;">🔒 로그인 후 이용 가능</span></div>
+                    </div>
+                    """, unsafe_allow_html=True)
+
+        # 앱 설치 안내
+        st.markdown("""
+        <div class="install-banner">
+            <div class="install-banner-title">📱 스마트폰 앱처럼 사용하기</div>
+            <div class="install-banner-desc">바탕화면에 추가하면 터치 한 번으로 바로 접속할 수 있습니다.</div>
+        """, unsafe_allow_html=True)
+
+        col_a, col_b = st.columns(2)
+        with col_a:
+            st.markdown("""
+            <div class="install-col-title">🍎 아이폰 (Safari)</div>
+            <div class="install-col-body">
+                1. 하단 공유(□↑) 버튼 터치<br>
+                2. <b style='color:#E8E0D0;'>홈 화면에 추가</b> 선택<br>
+                3. 우측 상단 <b style='color:#E8E0D0;'>추가</b> 버튼 터치
+            </div>
+            """, unsafe_allow_html=True)
+        with col_b:
+            st.markdown("""
+            <div class="install-col-title">🤖 안드로이드 (Chrome)</div>
+            <div class="install-col-body">
+                1. 우측 상단 메뉴(⋮) 버튼 터치<br>
+                2. <b style='color:#E8E0D0;'>홈 화면에 추가</b> 선택<br>
+                3. 팝업창에서 <b style='color:#E8E0D0;'>추가</b> 버튼 터치
+            </div>
+            """, unsafe_allow_html=True)
+        st.markdown("</div>", unsafe_allow_html=True)
+
+    elif selected_menu == "🚀 연금 시뮬레이터":
+        st.markdown('<div class="hero-eyebrow" style="color:#C9A84C; font-size:11px; letter-spacing:0.2em; font-weight:700;">TOOLS</div>', unsafe_allow_html=True)
+        st.markdown('<h2 style="font-family:Playfair Display,serif; color:#E8EDF2; margin-bottom:4px;">연금 시뮬레이터</h2>', unsafe_allow_html=True)
+        st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
+
+        st.markdown("""
+        <div class="card" style="max-width:520px;">
+            <div class="card-icon">🚀</div>
+            <div class="card-title">최저보증 변액종신연금 시뮬레이터</div>
+            <div class="card-body" style="margin-bottom:18px;">납입 조건과 운용 시나리오를 직접 입력하여 예상 연금액을 확인하세요.</div>
+        </div>
+        """, unsafe_allow_html=True)
+        st.link_button("시뮬레이터 시작하기 →", "https://chindongwook-ga-fc-pansion-simulation-app-yr83kb.streamlit.app/")
+
+    elif selected_menu == "📖 업무 매뉴얼":
+        show_manual_page()
+
+    elif selected_menu == "🔐 로그인":
+        login_screen()
+
+    else:
+        st.markdown(f'<div class="hero-eyebrow" style="color:#C9A84C; font-size:11px; letter-spacing:0.2em; font-weight:700;">COMING SOON</div>', unsafe_allow_html=True)
+        st.markdown(f'<h2 style="font-family:Playfair Display,serif; color:#E8EDF2;">{selected_menu}</h2>', unsafe_allow_html=True)
+        st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
+        st.markdown("""
+        <div class="card" style="max-width:480px;">
+            <div class="card-body">해당 서비스를 준비 중입니다. 빠른 시일 내에 제공할 예정입니다.</div>
+        </div>
+        """, unsafe_allow_html=True)
+
+# ─────────────────────────────────────────────
+# 8. 앱 실행
+# ─────────────────────────────────────────────
+main_app()
