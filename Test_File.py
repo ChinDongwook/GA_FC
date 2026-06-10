@@ -240,6 +240,7 @@ def inject_custom_css():
         box-shadow: 0 2px 16px rgba(0,19,48,0.06);
         margin-bottom: 16px;
         transition: transform 0.2s ease, border-color 0.2s ease;
+        height: 100%;
     }
     .card:hover {
         border-color: #C9A84C;
@@ -769,9 +770,8 @@ def main_app():
 
         # 서비스 카드 (변경 사항 적용부)
         st.markdown("<br>", unsafe_allow_html=True)
-        col1, col2, col3 = st.columns(3)
         
-        # 실제 사용하실 웹 주소로 URL 부분을 교체해주시면 됩니다.
+        # 기본 3개 카드
         cards = [
             ("💻", "더블유에셋 와인전산", "W-ASSET 통합 영업지원 및 고객관리 전산 시스템으로 이동합니다.", "https://wain.pro/main/login.php"),
             ("📊", "보험료비교", "각 보험사별 보험료 및 보장 내역을 한눈에 비교 분석합니다.", "https://wasset.bojang114.com/index.html"),
@@ -780,30 +780,46 @@ def main_app():
         
         is_logged_in = st.session_state.get("logged_in", False)
 
-        for col, (icon, title, body, link) in zip([col1, col2, col3], cards):
-            with col:
-                if is_logged_in:
-                    # 로그인 성공 상태: <a> 태그를 이용해 카드 클릭 시 새 창에서 열리도록 구현
-                    st.markdown(f"""
-                    <a href="{link}" target="_blank" style="text-decoration: none;">
-                        <div class="card" style="cursor: pointer;">
-                            <div class="card-icon">{icon}</div>
-                            <div class="card-title" style="color: #C9A84C;">{title} ↗</div>
-                            <div class="card-body">{body}</div>
-                        </div>
-                    </a>
-                    """, unsafe_allow_html=True)
-                else:
-                    # 미로그인 상태: 클릭 시 가장 간결한 JS 팝업(alert) 알림 처리
-                    st.markdown(f"""
-                    <a href="javascript:void(0);" onclick="alert('로그인 후 이용해주세요');" style="text-decoration: none;">
-                        <div class="card" style="opacity: 0.75; cursor: pointer;">
-                            <div class="card-icon">{icon}</div>
-                            <div class="card-title">{title}</div>
-                            <div class="card-body">{body}<br><br><span style="color:#C9A84C; font-size:12px; font-weight:600;">🔒 로그인 후 이용 가능</span></div>
-                        </div>
-                    </a>
-                    """, unsafe_allow_html=True)
+        # 로그인 시 6개의 추가 카드 메뉴 확장
+        if is_logged_in:
+            cards.extend([
+                ("📂", "영업 지원 자료실", "영업에 필요한 각종 브로셔 및 제안서 양식을 제공합니다.", "#"),
+                ("👥", "고객 관리 툴", "효율적인 고객 일정 및 상담 이력 관리 시스템입니다.", "#"),
+                ("🛡️", "보장 분석 리포트", "고객 맞춤형 보장 분석 및 부족한 보장 내역을 리포팅합니다.", "#"),
+                ("🎓", "교육용 VOD", "센터 내 정규 교육 및 핵심 상품 해설 영상을 시청합니다.", "#"),
+                ("📑", "상품 비교 자료", "주요 생명/손해보험사 상품 비교 핵심 요약 자료입니다.", "#"),
+                ("🏆", "우수사례 공유", "우수 FC들의 영업 노하우와 성공 사례를 공유하는 공간입니다.", "#")
+            ])
+
+        # 전체 카드 목록을 3개씩 끊어서 열(column)을 생성하고 배치 (그리드 구현)
+        for i in range(0, len(cards), 3):
+            cols = st.columns(3)
+            # 슬라이싱된 카드를 각 열에 매핑
+            for col, card in zip(cols, cards[i:i+3]):
+                icon, title, body, link = card
+                with col:
+                    if is_logged_in:
+                        # 로그인 성공 상태: <a> 태그를 이용해 카드 클릭 시 새 창에서 열리도록 구현
+                        st.markdown(f"""
+                        <a href="{link}" target="_blank" style="text-decoration: none;">
+                            <div class="card" style="cursor: pointer;">
+                                <div class="card-icon">{icon}</div>
+                                <div class="card-title" style="color: #C9A84C;">{title} ↗</div>
+                                <div class="card-body">{body}</div>
+                            </div>
+                        </a>
+                        """, unsafe_allow_html=True)
+                    else:
+                        # 미로그인 상태: 클릭 시 가장 간결한 JS 팝업(alert) 알림 처리
+                        st.markdown(f"""
+                        <a href="javascript:void(0);" onclick="alert('로그인 후 이용해주세요');" style="text-decoration: none;">
+                            <div class="card" style="opacity: 0.75; cursor: pointer;">
+                                <div class="card-icon">{icon}</div>
+                                <div class="card-title">{title}</div>
+                                <div class="card-body">{body}<br><br><span style="color:#C9A84C; font-size:12px; font-weight:600;">🔒 로그인 후 이용 가능</span></div>
+                            </div>
+                        </a>
+                        """, unsafe_allow_html=True)
 
         # 앱 설치 안내
         st.markdown("""
