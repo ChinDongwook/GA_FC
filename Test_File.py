@@ -1,4 +1,5 @@
 import streamlit as st
+import streamlit.components.v1 as components
 
 # ─────────────────────────────────────────────
 # 1. 페이지 설정
@@ -12,7 +13,6 @@ if "logged_in" not in st.session_state:
     st.session_state["logged_in"] = False
     st.session_state["current_user"] = "게스트"
 
-# 테마 변경 시 페이지 유지를 위한 세션 상태 초기화
 if "menu_page" not in st.session_state:
     st.session_state["menu_page"] = "🏢 센터 소개"
 
@@ -39,7 +39,7 @@ def inject_custom_css():
         background-color: #070B11 !important;
         border-bottom: 1px solid #1E2D42 !important;
     }
-  /* 햄버거/점세개 메뉴 아이콘 */
+    /* 햄버거/점세개 메뉴 아이콘 */
     [data-testid="stHeader"] button,
     [data-testid="stHeader"] svg,
     [data-testid="stHeader"] span {
@@ -50,6 +50,14 @@ def inject_custom_css():
     [data-testid="stHeader"] button:hover span {
         color: #C9A84C !important;
         fill: #C9A84C !important;
+    }
+    /* Streamlit 상단 툴바 (Deploy 버튼 등) */
+    [data-testid="stToolbar"],
+    .stToolbar {
+        background-color: #070B11 !important;
+    }
+    [data-testid="stToolbar"] * {
+        color: #8B9BB4 !important;
     }
     /* 상단 데코 바 제거 */
     #MainMenu, header[data-testid="stHeader"]::before {
@@ -481,68 +489,63 @@ def inject_custom_css():
 
 
 # ─────────────────────────────────────────────
-# JS: Streamlit 테마 감지 → body 클래스 토글
+# JS: Streamlit 테마 감지 → body 클래스 토글 (components.html 우회 방식 적용)
 # ─────────────────────────────────────────────
 def inject_theme_detector():
-    st.markdown(r"""
+    components.html(r"""
     <script>
     (function() {
-        function getStreamlitTheme() {
-            // Streamlit은 라이트 모드일 때 --background-color 가 밝은 값
-            const style = getComputedStyle(document.body);
-            const bg = style.getPropertyValue('--background-color').trim();
-            if (!bg) {
-                // CSS 변수 없으면 실제 배경색으로 판단
-                const appEl = document.querySelector('[data-testid="stAppViewContainer"]');
-                if (!appEl) return 'dark';
-                const appBg = getComputedStyle(appEl).backgroundColor;
-                const rgb = appBg.match(/\d+/g);
-                if (!rgb) return 'dark';
-                const brightness = (parseInt(rgb[0]) * 299 + parseInt(rgb[1]) * 587 + parseInt(rgb[2]) * 114) / 1000;
-                return brightness > 128 ? 'light' : 'dark';
-            }
-            // hex 또는 rgb 값으로 밝기 판단
-            let r, g, b;
-            if (bg.startsWith('#')) {
-                const hex = bg.replace('#','');
-                r = parseInt(hex.substr(0,2),16);
-                g = parseInt(hex.substr(2,2),16);
-                b = parseInt(hex.substr(4,2),16);
-            } else {
-                const rgb = bg.match(/\d+/g);
-                if (!rgb) return 'dark';
-                [r,g,b] = rgb.map(Number);
-            }
-            const brightness = (r*299 + g*587 + b*114) / 1000;
-            return brightness > 128 ? 'light' : 'dark';
-        }
+        try {
+            // 부모 DOM(Streamlit 앱 본체)에 접근
+            const parentDoc = window.parent.document;
+            if (!parentDoc) return;
 
-        function applyTheme() {
-            const theme = getStreamlitTheme();
-            if (theme === 'light') {
-                document.body.classList.add('light-mode');
-            } else {
-                document.body.classList.remove('light-mode');
+            function applyTheme() {
+                // Streamlit이 설정한 실제 배경색 변수 감지
+                let bgColor = window.parent.getComputedStyle(parentDoc.documentElement).getPropertyValue('--background-color').trim()
+                           || window.parent.getComputedStyle(parentDoc.body).getPropertyValue('--background-color').trim();
+                
+                if (!bgColor) return;
+
+                let r, g, b;
+                if (bgColor.startsWith('#')) {
+                    let hex = bgColor.replace('#', '');
+                    if (hex.length === 3) hex = hex.split('').map(x => x + x).join('');
+                    r = parseInt(hex.substr(0, 2), 16);
+                    g = parseInt(hex.substr(2, 2), 16);
+                    b = parseInt(hex.substr(4, 2), 16);
+                } else {
+                    const rgb = bgColor.match(/\d+/g);
+                    if (rgb && rgb.length >= 3) {
+                        r = parseInt(rgb[0], 10);
+                        g = parseInt(rgb[1], 10);
+                        b = parseInt(rgb[2], 10);
+                    } else {
+                        return;
+                    }
+                }
+
+                // 밝기 공식 적용
+                const brightness = (r * 299 + g * 587 + b * 114) / 1000;
+                
+                // 테마 클래스 토글
+                if (brightness > 128) {
+                    parentDoc.body.classList.add('light-mode');
+                } else {
+                    parentDoc.body.classList.remove('light-mode');
+                }
             }
-        }
 
-        // 초기 적용
-        applyTheme();
-
-        // MutationObserver로 Streamlit 테마 변경 감지
-        const observer = new MutationObserver(function(mutations) {
+            // 초기 강제 적용 및 주기적 감시 (Streamlit 메뉴 전환 실시간 포착)
             applyTheme();
-        });
-        observer.observe(document.documentElement, {
-            attributes: true,
-            attributeFilter: ['data-theme', 'style', 'class'],
-            subtree: false
-        });
-        // 주기적으로도 체크 (Streamlit 내부 변경 대응)
-        setInterval(applyTheme, 800);
+            setInterval(applyTheme, 500);
+
+        } catch(e) {
+            console.error("테마 전환 스크립트 오류:", e);
+        }
     })();
     </script>
-    """, unsafe_allow_html=True)
+    """, height=0, width=0)
 
 # ─────────────────────────────────────────────
 # 4. 이미지 오류 방지
