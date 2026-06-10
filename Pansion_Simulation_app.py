@@ -120,7 +120,7 @@ compare_data = [{"개시 연령": f"{age}세", "월 수령액 (만원)": calcula
 st.plotly_chart(px.bar(pd.DataFrame(compare_data), x="개시 연령", y="월 수령액 (만원)", text_auto='.0f', color="월 수령액 (만원)", color_continuous_scale="Blues"), use_container_width=True)
 
 st.markdown("---")
-st.subheader(f"3. 개시 연령별 총 연금준비금 총액 및 납입원금 ({target_r_age}세 개시 기준)")
+st.subheader(f"3. 개시 연령별 연금준비금 총액 및 납입원금 ({target_r_age}세 개시 기준)")
 df_cum = pd.DataFrame([{"생존 나이": s_age, "납입 원금": t_prin, "연금 누적 수익": max(0, (ann_pen * (s_age - target_r_age + 1)) - t_prin)} for s_age in range(80, 131)])
 st.plotly_chart(px.area(df_cum, x="생존 나이", y=["납입 원금", "연금 누적 수익"], color_discrete_map={"납입 원금": "#E74C3C", "연금 누적 수익": "#2E86C1"}), use_container_width=True)
 
