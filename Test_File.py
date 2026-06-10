@@ -772,9 +772,9 @@ def main_app():
         
         # 실제 사용하실 웹 주소로 URL 부분을 교체해주시면 됩니다.
         cards = [
-            ("💻", "더블유에셋 와인전산", "W-ASSET 통합 영업지원 및 고객관리 전산 시스템으로 이동합니다.", "https://wine.w-asset.co.kr/"),
-            ("📊", "보험료비교", "각 보험사별 보험료 및 보장 내역을 한눈에 비교 분석합니다.", "https://www.w-asset.co.kr/"),
-            ("📞", "성남센터 담당자 연락처", "성남센터 업무 지원 담당자들의 직통 연락처를 확인합니다.", "https://www.w-asset.co.kr/")
+            ("💻", "더블유에셋 와인전산", "W-ASSET 통합 영업지원 및 고객관리 전산 시스템으로 이동합니다.", "https://wain.pro/main/login.php"),
+            ("📊", "보험료비교", "각 보험사별 보험료 및 보장 내역을 한눈에 비교 분석합니다.", "https://wasset.bojang114.com/index.html"),
+            ("📞", "성남센터 담당자 연락처", "성남센터 업무 지원 담당자들의 직통 연락처를 확인합니다.", "https://onedrive.live.com/:x:/g/personal/b11c802954e27554/UQBUdeJUKYAcIICxTWUCAAAAAMtMG2p_eXrSa-g?rtime=tt92jqnG3kg&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvcyFBbFIxNGxRcGdCeXhpY3BOeTB3YmFuOTVldEpyNkE_ZT1sUm04d2c")
         ]
         
         is_logged_in = st.session_state.get("logged_in", False)
