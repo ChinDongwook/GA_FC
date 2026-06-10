@@ -107,7 +107,7 @@ st.markdown("---")
 t_prin, t_int, t_bonus, f_res, ann_pen = calculate_details(current_age, gender, monthly_pay, pay_years, target_r_age)
 col1, col2, col3 = st.columns(3)
 col1.metric("총 납입 원금", f"{t_prin:,.0f} 만원")
-col2.metric(f"최종 연금 준비금 ({target_r_age}세)", f"{f_res:,.0f} 만원", f"누적이자 +{(t_int+t_bonus):,.0f} 만원")
+col2.metric(f"최종 연금준비금 ({target_r_age}세)", f"{f_res:,.0f} 만원", f"누적이자 +{(t_int+t_bonus):,.0f} 만원")
 col3.metric("예상 월 수령액", f"{ann_pen/12:,.0f} 만원/월", f"연 {ann_pen:,.0f} 만원")
 
 st.markdown("<br>", unsafe_allow_html=True)
@@ -120,13 +120,13 @@ compare_data = [{"개시 연령": f"{age}세", "월 수령액 (만원)": calcula
 st.plotly_chart(px.bar(pd.DataFrame(compare_data), x="개시 연령", y="월 수령액 (만원)", text_auto='.0f', color="월 수령액 (만원)", color_continuous_scale="Blues"), use_container_width=True)
 
 st.markdown("---")
-st.subheader(f"3. 생존 연령별 연금 누계액 및 납입원금 ({target_r_age}세 개시 기준)")
+st.subheader(f"3. 개시 연령별 총 연금준비금 총액 및 납입원금 ({target_r_age}세 개시 기준)")
 df_cum = pd.DataFrame([{"생존 나이": s_age, "납입 원금": t_prin, "연금 누적 수익": max(0, (ann_pen * (s_age - target_r_age + 1)) - t_prin)} for s_age in range(80, 131)])
 st.plotly_chart(px.area(df_cum, x="생존 나이", y=["납입 원금", "연금 누적 수익"], color_discrete_map={"납입 원금": "#E74C3C", "연금 누적 수익": "#2E86C1"}), use_container_width=True)
 
 # 4. 기대여명 섹션 복구
 st.markdown("---")
-st.subheader("4. 기대여명으로 보는 예상 수익")
+st.subheader("4. 기대 여명으로 보는 예상 수익")
 base_life = 92 if gender == "남" else 98
 mid_life = int(base_life + (target_r_age - current_age) * 0.25)
 roi_data = [{"구간": "기대수명 하단", "수익률": (max(0, ann_pen * ((mid_life-2) - target_r_age + 1) - t_prin) / t_prin) * 100},
