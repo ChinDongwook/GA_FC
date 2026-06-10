@@ -39,17 +39,8 @@ def inject_custom_css():
         background-color: #070B11 !important;
         border-bottom: 1px solid #1E2D42 !important;
     }
-    /* 햄버거/점세개 메뉴 아이콘 */
-    [data-testid="stHeader"] button,
-    [data-testid="stHeader"] svg,
-    [data-testid="stHeader"] span {
-        color: #8B9BB4 !important;
-        fill: #8B9BB4 !important;
-    }
-    [data-testid="stHeader"] button:hover svg,
-    [data-testid="stHeader"] button:hover span {
-        color: #C9A84C !important;
-        fill: #C9A84C !important;
+   /* 사이드바 토글 버튼 보호 */
+    [data-testid="collapsedControl"] { display: flex !important; color: #002147 !important; }
     }
     /* Streamlit 상단 툴바 (Deploy 버튼 등) */
     [data-testid="stToolbar"],
