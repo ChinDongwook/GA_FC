@@ -1,6 +1,7 @@
 import streamlit as st
 import streamlit.components.v1 as components
 import datetime
+import pandas as pd
 
 # ─────────────────────────────────────────────
 # 1. 페이지 설정
@@ -673,7 +674,63 @@ def login_screen():
     """, height=0, width=0)
 
 # ─────────────────────────────────────────────
-# 7. 메인 앱
+# 7. 마이 페이지 (메모장 & 구글 시트 연동)
+# ─────────────────────────────────────────────
+def show_my_page():
+    st.markdown('<div class="hero-eyebrow" style="color:#C9A84C; font-size:11px; letter-spacing:0.2em; font-weight:700;">MY PAGE</div>', unsafe_allow_html=True)
+    st.markdown('<h2 style="font-family:Playfair Display,serif; color:#E8EDF2; margin-bottom:4px;">개인 메모장</h2>', unsafe_allow_html=True)
+    st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
+
+    user_id = st.session_state.get("current_user", "알수없음")
+    st.write(f"**{user_id}** 님의 전용 메모 공간입니다.")
+
+    try:
+        # st-gsheets-connection 패키지 로드 시도
+        from streamlit_gsheets import GSheetsConnection
+        conn = st.connection("gsheets", type=GSheetsConnection)
+        
+        # 캐시 없이 항상 최신 데이터 불러오기 (Sheet1 기준)
+        df = conn.read(worksheet="Sheet1", ttl=0)
+        
+        # DB에 필수 컬럼이 없으면 초기화
+        if 'ID' not in df.columns:
+            df = pd.DataFrame(columns=['ID', 'Memo'])
+        
+        # 현재 접속한 유저의 기존 메모 추출
+        user_data = df[df['ID'] == user_id]
+        current_memo = user_data.iloc[0]['Memo'] if not user_data.empty else ""
+        
+        # UI
+        new_memo = st.text_area("메모 작성 (자동으로 구글 시트에 저장됩니다)", value=current_memo, height=300, placeholder="고객 상담 기록, 개인 일정 등을 입력하세요.")
+        
+        if st.button("💾 클라우드 저장"):
+            # 데이터프레임 업데이트
+            if not user_data.empty:
+                df.loc[df['ID'] == user_id, 'Memo'] = new_memo
+            else:
+                new_row = pd.DataFrame({'ID': [user_id], 'Memo': [new_memo]})
+                df = pd.concat([df, new_row], ignore_index=True)
+            
+            # 구글 시트에 다시 쓰기
+            conn.update(worksheet="Sheet1", data=df)
+            st.success("메모가 구글 스프레드시트에 영구적으로 저장되었습니다!")
+
+    except Exception as e:
+        # 라이브러리가 설치되지 않았거나 secrets.toml 설정이 안 되어있을 때의 임시 처리 (사이트가 멈추지 않도록 보호)
+        st.error("💡 구글 스프레드시트 연동이 아직 완료되지 않았습니다.")
+        st.info("아래의 '임시 저장 모드'로 테스트할 수 있습니다. (새로고침 시 삭제됨)")
+        
+        if "temp_memo" not in st.session_state:
+            st.session_state["temp_memo"] = ""
+            
+        new_memo = st.text_area("메모 작성", value=st.session_state["temp_memo"], height=300)
+        if st.button("💾 임시 저장하기"):
+            st.session_state["temp_memo"] = new_memo
+            st.success("임시 저장되었습니다. 실제 반영을 위해 구글 API 연동을 완료해주세요.")
+
+
+# ─────────────────────────────────────────────
+# 8. 메인 앱
 # ─────────────────────────────────────────────
 def main_app():
     inject_custom_css()
@@ -724,8 +781,8 @@ def main_app():
                 st.rerun()
             st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
             
-            # 사이드바에서 혼동을 주던 임시 메뉴를 제거하고 본질적인 메뉴만 남김
-            menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼"]
+            # 관리자/개인용 마이페이지 메뉴 추가
+            menu_options = ["🏢 센터 소개", "🚀 연금 시뮬레이터", "📖 업무 매뉴얼", "📝 마이 페이지"]
         else:
             st.markdown('<div style="font-size:12px; color:#8B9BB4; padding:0 4px; margin-bottom:12px;">게스트 접속 중</div>', unsafe_allow_html=True)
             st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
@@ -783,12 +840,12 @@ def main_app():
         # 로그인 시 6개의 추가 카드 메뉴 확장
         if is_logged_in:
             cards.extend([
-                ("📂", "모든 보험사 전산설치", "모든 보험사 전살설치 및 설계요청 소식지 담보 맛집을 한눈에.", "https://gaworld.kr/wasset-infra"),
-                ("👥", "고객 관리 툴", "서비스 준비중입니다.", ""),
-                ("🛡️", "보장 분석 리포트", "서비스 준비중입니다.", ""),
-                ("🎓", "교육용 VOD", "서비스 준비중입니다.", ""),
-                ("📑", "상품 비교 자료", "서비스 준비중입니다.", ""),
-                ("🏆", "우수사례 공유", "서비스 준비중입니다.", "")
+                ("📂", "영업 지원 자료실", "영업에 필요한 각종 브로셔 및 제안서 양식을 제공합니다.", "#"),
+                ("👥", "고객 관리 툴", "효율적인 고객 일정 및 상담 이력 관리 시스템입니다.", "#"),
+                ("🛡️", "보장 분석 리포트", "고객 맞춤형 보장 분석 및 부족한 보장 내역을 리포팅합니다.", "#"),
+                ("🎓", "교육용 VOD", "센터 내 정규 교육 및 핵심 상품 해설 영상을 시청합니다.", "#"),
+                ("📑", "상품 비교 자료", "주요 생명/손해보험사 상품 비교 핵심 요약 자료입니다.", "#"),
+                ("🏆", "우수사례 공유", "우수 FC들의 영업 노하우와 성공 사례를 공유하는 공간입니다.", "#")
             ])
 
         # 전체 카드 목록을 3개씩 끊어서 열(column)을 생성하고 배치 (그리드 구현)
@@ -865,6 +922,9 @@ def main_app():
 
     elif selected_menu == "📖 업무 매뉴얼":
         show_manual_page()
+        
+    elif selected_menu == "📝 마이 페이지":
+        show_my_page()
 
     elif selected_menu == "🔐 로그인":
         login_screen()
@@ -882,4 +942,5 @@ def main_app():
 # ─────────────────────────────────────────────
 # 8. 앱 실행
 # ─────────────────────────────────────────────
-main_app()
+if __name__ == "__main__":
+    main_app()
