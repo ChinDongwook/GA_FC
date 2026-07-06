@@ -775,7 +775,7 @@ def main_app():
         cards = [
             ("💻", "더블유에셋 New전산", "W-ASSET 통합 영업지원 및 고객관리 전산 시스템으로 이동합니다.", "https://wasset.kr/main"),
             ("📊", "보험료비교", "각 보험사별 보험료 및 보장 내역을 한눈에 비교 분석합니다.", "https://wasset.bojang114.com/index.html"),
-            ("📞", "성남센터 담당자 연락처", "성남센터 업무 지원 담당자들의 직통 연락처를 확인합니다.", "https://onedrive.live.com/:x:/g/personal/b11c802954e27554/UQBUdeJUKYAcIICxTWUCAAAAAMtMG2p_eXrSa-g?rtime=tt92jqnG3kg&redeem=aHR0cHM6Ly8xZHJ2Lm1zL3gvcyFBbFIxNGxRcGdCeXhpY3BOeTB3YmFuOTVldEpyNkE_ZT1sUm04d2c")
+            ("📞", "성남센터 담당자 연락처", "성남센터 업무 지원 담당자들의 직통 연락처를 확인합니다.", "https://docs.google.com/spreadsheets/d/1pspaAVWQlx7ypp878z6PZPwk27TybUfKoGmybvaiBOU/edit?gid=0#gid=0")
         ]
         
         is_logged_in = st.session_state.get("logged_in", False)
