@@ -774,7 +774,7 @@ def main_app():
         # 기본 3개 카드
         cards = [
             ("💻", "더블유에셋 New전산", "W-ASSET 통합 영업지원 및 고객관리 전산 시스템으로 이동합니다.", "https://wasset.kr/main"),
-            ("📊", "보험료비교", "각 보험사별 보험료 및 보장 내역을 한눈에 비교 분석합니다.", "https://wasset.bojang114.com/index.html"),
+            ("📊", "보험료비교", "손보.생보 보험사별 보험료 비교, OK마이보험 보장 내역을 한눈에 비교 분석합니다.", "https://wasset.bojang114.com/index.html"),
             ("📞", "성남센터 담당자 연락처", "성남센터 업무 지원 담당자들의 직통 연락처를 확인합니다.", "https://docs.google.com/spreadsheets/d/1pspaAVWQlx7ypp878z6PZPwk27TybUfKoGmybvaiBOU/edit?gid=0#gid=0")
         ]
         
