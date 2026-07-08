@@ -786,7 +786,7 @@ def main_app():
             cards.extend([
                 ("📂", "모든 보험사 전산설치", "모든 보험사 전살설치 및 설계요청 각보험사 정보. 카드납. 소식지 .", "https://wasset-info.com/insurance"),
                 ("👥", "고객 관리 툴", "서비스 준비중입니다.", ""),
-                ("🛡️", "보장 분석 리포트", "서비스 준비중입니다.", ""),
+                ("🛡️", "보장 분석 리포트", "서비스 준비중입니다.", "https://wasset.bojang114.com/uiFitbojang/index.html?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb25zdWx0YW50aWQiOiJXQTIzMDk2MiIsImNvbnN1bHRhbnRfbmFtZSI6IuynhOuPmeyasSIsImNvbXB5X2NkIjoiQTIzOCIsImNvbXB5X25hbWUiOiLrjZTruJTsnKDsl5DshYsiLCJicmFuY2hfbmFtZSI6IuuNlOu4lOycoOyXkOyFiyIsImV4cCI6MTc4MzU2NDE1MiwiY29uc3VsdGFudF9pZCI6IldBMjMwOTYyIiwibmFtZSI6IuynhOuPmeyasSIsImNsaWVudF9pZCI6IkEyMzgiLCJtZG4iOiJBMjM4Iiwicm9sZSI6IiIsImNsaWVudF9pcCI6IjIyMi45OC4xNzEuMjMzIn0.LKGm8lUGYR8gUhGt9xXiswN1UVIoDOKPPlR_DxVq_gY"),
                 ("🎓", "더블유에셋 와인프로", "더블유에셋 구전산 와인프로 인트라넷.", "https://wain.pro/main/login.php"),
                 ("📑", "상품 비교 자료", "서비스 준비중입니다.", ""),
                 ("🏆", "우수사례 공유", "서비스 준비중입니다.", "")
