@@ -584,9 +584,9 @@ def show_manual_page():
                 st.markdown("##### 센터 내 주요 연락처")
                 st.markdown('<div class="gold-divider"></div>', unsafe_allow_html=True)
                 st.table({
-                    "부서 / 직함": ["센터장", "매니저", "지원팀"],
-                    "성명":       ["홍길동", "김철수", "이영희"],
-                    "내선번호":   ["101",   "102",   "103"],
+                    "부서 / 직함": ["센터장", "성남센터", "지원팀"],
+                    "성명":       ["진동욱", "김철수", "이영희"],
+                    "내선번호":   ["010-5717-1402",   "031-722-2223",   "103"],
                 })
             else:
                 st.markdown(f"##### {name.split(' ', 1)[-1]} 지침")
@@ -620,6 +620,7 @@ def login_screen():
                 "wa230962":   "wa230962",
                 "guest":      "guest",
                 "center_fc3": "pass3333",
+                "wa22014":   "wa22014", "wa221132":   "wa221132", "wa140867":   "wa140867", "wa211014":   "wa211014", 
             }
             if user_id in valid_users and valid_users[user_id] == password:
                 st.session_state["logged_in"] = True
@@ -786,7 +787,7 @@ def main_app():
                 ("📂", "모든 보험사 전산설치", "모든 보험사 전살설치 및 설계요청 각보험사 정보. 카드납. 소식지 .", "https://wasset-info.com/insurance"),
                 ("👥", "고객 관리 툴", "서비스 준비중입니다.", ""),
                 ("🛡️", "보장 분석 리포트", "서비스 준비중입니다.", ""),
-                ("🎓", "교육용 VOD", "서비스 준비중입니다.", ""),
+                ("🎓", "더블유에셋 와인프로", "더블유에셋 구전산 와인프로 인트라넷.", "https://wain.pro/main/login.php"),
                 ("📑", "상품 비교 자료", "서비스 준비중입니다.", ""),
                 ("🏆", "우수사례 공유", "서비스 준비중입니다.", "")
             ])
