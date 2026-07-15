@@ -754,7 +754,7 @@ def main_app():
     safe_image("images/logo.png", width=80)
     st.markdown("""
     <div class="hero-container">
-        <div class="hero-eyebrow">WASSET SUENGNAM CENTER</div>
+        <div class="hero-eyebrow">WASSET SEUNGNAM CENTER</div>
         <div class="hero-title">더블유에셋 성남센터</div>
         <p class="hero-sub">신뢰와 전문성으로 함께하는 자산관리 파트너</p>
     </div>
