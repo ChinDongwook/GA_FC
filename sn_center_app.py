@@ -788,7 +788,7 @@ def main_app():
                 ("📑", "영업 자료", "손생보 소식지, 시책, 카드뉴스, 상품비교, 가이드북, 질병통계, 각종 금융 자료", "https://drive.google.com/drive/folders/1Oq1MjqWxCqhEt9808ejD6ult0H-ng3Ts"),
                 ("🛡️", "보장 분석 리포트", "한화손보, KB손보, DB손보 보장분석PDF 등록으로 전문적인 보장분석 리포트를 만들어보세요", "https://wasset.bojang114.com/uiFitbojang/index.html?token=eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJjb25zdWx0YW50aWQiOiJXQTIzMDk2MiIsImNvbnN1bHRhbnRfbmFtZSI6IuynhOuPmeyasSIsImNvbXB5X2NkIjoiQTIzOCIsImNvbXB5X25hbWUiOiLrjZTruJTsnKDsl5DshYsiLCJicmFuY2hfbmFtZSI6IuuNlOu4lOycoOyXkOyFiyIsImV4cCI6MTc4MzU2NDE1MiwiY29uc3VsdGFudF9pZCI6IldBMjMwOTYyIiwibmFtZSI6IuynhOuPmeyasSIsImNsaWVudF9pZCI6IkEyMzgiLCJtZG4iOiJBMjM4Iiwicm9sZSI6IiIsImNsaWVudF9pcCI6IjIyMi45OC4xNzEuMjMzIn0.LKGm8lUGYR8gUhGt9xXiswN1UVIoDOKPPlR_DxVq_gY"),
                 ("🎓", "더블유에셋 와인프로", "더블유에셋 구전산 와인프로 인트라넷.", "https://wain.pro/main/login.php"),
-                ("👥", "고객 관리 툴", "서비스 준비중입니다.", ""),
+                ("👥", "WASEET_AGIT 집단지성", "서비스 준비중입니다.", ""),
                 ("🏆", "우수사례 공유", "서비스 준비중입니다.", "")
             ])
 
