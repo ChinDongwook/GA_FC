@@ -1,4 +1,19 @@
-import streamlit as st
+"""
+
+[ 프로그램 상세 로직 및 구조 엄격 유지 ]
+
+1. 자산 축적: 가입 후 20년까지 연 8% 단리, 이후 개시 전까지 연 5% 단리 적용.
+
+2. 장기유지 가산보너스는 유지20년시 7%, 25년시 16%, 30년시 24% 적용.
+
+3. 연금준비금: (원금 + 적립이자) × (1 + 가산율 보너스).
+
+4. 연금 수령액: 최종준비금 × 연령별 지급률 (남성 0.2% 추가 가산).
+
+5. 시각화 출력: 스트림릿(Streamlit) 환경에 맞춘 핵심 요약 지표 및 3대 차트(파이/바/영역) 순정 유지.
+
+"""
+  import streamlit as st
 import pandas as pd
 import plotly.express as px
 import datetime
@@ -119,7 +134,7 @@ compare_data = []
 for age in range(compare_range[0], compare_range[1] + 1):
     ann_pension = calculate_details(current_age, gender, monthly_pay, pay_years, age)[4]
     compare_data.append({
-        "개시 연령": f"{age}세<br>(연 {ann_pension:,.0f}만)",
+        "개시 연령": f"{age}세 <span style='font-size:10px;'>(연{ann_pension:,.0f}만)</span>",
         "월 수령액 (만원)": ann_pension / 12
     })
 fig_bar = px.bar(pd.DataFrame(compare_data), x="개시 연령", y="월 수령액 (만원)", text_auto='.0f', color="월 수령액 (만원)", color_continuous_scale="Blues")
