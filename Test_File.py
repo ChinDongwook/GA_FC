@@ -13,7 +13,8 @@
 5. 시각화 출력: 스트림릿(Streamlit) 환경에 맞춘 핵심 요약 지표 및 3대 차트(파이/바/영역) 순정 유지.
 
 """
-  import streamlit as st
+
+import streamlit as st
 import pandas as pd
 import plotly.express as px
 import datetime
