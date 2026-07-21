@@ -1,10 +1,17 @@
 """
+
 [ 프로그램 상세 로직 및 구조 엄격 유지 ]
+
 1. 자산 축적: 가입 후 20년까지 연 8% 단리, 이후 개시 전까지 연 5% 단리 적용.
+
 2. 장기유지 가산보너스는 유지20년시 7%, 25년시 16%, 30년시 24% 적용.
+
 3. 연금준비금: (원금 + 적립이자) × (1 + 가산율 보너스).
+
 4. 연금 수령액: 최종준비금 × 연령별 지급률 (남성 0.2% 추가 가산).
+
 5. 시각화 출력: 스트림릿(Streamlit) 환경에 맞춘 핵심 요약 지표 및 3대 차트(파이/바/영역) 순정 유지.
+
 """
 
 import streamlit as st
@@ -87,6 +94,7 @@ def calculate_details(current_age, gender, monthly_pay, p_years, r_age):
 # --- [3] 사이드바 (입력부) ---
 with st.sidebar:
     st.title("고객 정보 입력")
+    cust_name = st.text_input("▶ 고객 이름", value="홍길동")
     gender = st.selectbox("▶ 성별", ["남", "여"], index=1)
     col1, col2 = st.columns(2)
     today = datetime.date.today()
@@ -112,12 +120,26 @@ col3.metric("예상 월 수령액", f"{ann_pen/12:,.0f} 만원/월", f"연 {ann_
 
 st.markdown("<br>", unsafe_allow_html=True)
 st.subheader("1. 예상 연금 준비금 구성 비율")
-st.plotly_chart(px.pie(pd.DataFrame({"항목": ["순수 납입 원금", "누적 적립 이자", "장기유지 가산보너스"], "금액": [t_prin, t_int, t_bonus]}), values="금액", names="항목", hole=0.4, color_discrete_sequence=px.colors.sequential.Teal), use_container_width=True)
+color_map = {
+    "순수 납입 원금": "#1F4E79",
+    "누적 적립 이자": "#548235",
+    "장기유지 가산보너스": "#FFC000"
+}
+fig_pie = px.pie(pd.DataFrame({"항목": ["순수 납입 원금", "누적 적립 이자", "장기유지 가산보너스"], "금액": [t_prin, t_int, t_bonus]}), values="금액", names="항목", hole=0.4, color="항목", color_discrete_map=color_map)
+fig_pie.update_traces(textinfo='label+percent', textposition='outside')
+st.plotly_chart(fig_pie, use_container_width=True)
 
 st.markdown("---")
 st.subheader("2. 연금 개시 연령별 수령액 비교")
-compare_data = [{"개시 연령": f"{age}세", "월 수령액 (만원)": calculate_details(current_age, gender, monthly_pay, pay_years, age)[4]/12} for age in range(compare_range[0], compare_range[1] + 1)]
-st.plotly_chart(px.bar(pd.DataFrame(compare_data), x="개시 연령", y="월 수령액 (만원)", text_auto='.0f', color="월 수령액 (만원)", color_continuous_scale="Blues"), use_container_width=True)
+compare_data = []
+for age in range(compare_range[0], compare_range[1] + 1):
+    ann_pension = calculate_details(current_age, gender, monthly_pay, pay_years, age)[4]
+    compare_data.append({
+        "개시 연령": f"{age}세 <span style='font-size:10px;'>(연{ann_pension:,.0f}만)</span>",
+        "월 수령액 (만원)": ann_pension / 12
+    })
+fig_bar = px.bar(pd.DataFrame(compare_data), x="개시 연령", y="월 수령액 (만원)", text_auto='.0f', color="월 수령액 (만원)", color_continuous_scale="Blues")
+st.plotly_chart(fig_bar, use_container_width=True)
 
 st.markdown("---")
 st.subheader(f"3. 개시 연령별 연금준비금 총액 및 납입원금 ({target_r_age}세 개시 기준)")
@@ -133,4 +155,4 @@ roi_data = [{"구간": "기대수명 하단", "수익률": (max(0, ann_pen * ((m
             {"구간": "기대수명 중단", "수익률": (max(0, ann_pen * (mid_life - target_r_age + 1) - t_prin) / t_prin) * 100},
             {"구간": "기대수명 상단", "수익률": (max(0, ann_pen * ((mid_life+10) - target_r_age + 1) - t_prin) / t_prin) * 100}]
 st.plotly_chart(px.bar(pd.DataFrame(roi_data), x="구간", y="수익률", text_auto='.1f', color="수익률", color_continuous_scale="Viridis"), use_container_width=True)
-st.success(f"고객님께서 {mid_life+10}세까지 생존하실 경우, 원금 대비 최대 {roi_data[2]['수익률']:.1f}%의 수익을 기대할 수 있습니다.")
+st.success(f"고객님의 예상 최대 기대여명은 **{mid_life+10}세**이며, 이때까지 연금을 수령하실 경우 원금 대비 최대 **{roi_data[2]['수익률']:.1f}%**의 수익을 기대할 수 있습니다.")
