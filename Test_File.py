@@ -78,6 +78,7 @@ def calculate_details(current_age, gender, monthly_pay, p_years, r_age):
 # --- [3] 사이드바 (입력부) ---
 with st.sidebar:
     st.title("고객 정보 입력")
+    cust_name = st.text_input("▶ 고객 이름", value="홍길동")
     gender = st.selectbox("▶ 성별", ["남", "여"], index=1)
     col1, col2 = st.columns(2)
     today = datetime.date.today()
@@ -103,7 +104,12 @@ col3.metric("예상 월 수령액", f"{ann_pen/12:,.0f} 만원/월", f"연 {ann_
 
 st.markdown("<br>", unsafe_allow_html=True)
 st.subheader("1. 예상 연금 준비금 구성 비율")
-fig_pie = px.pie(pd.DataFrame({"항목": ["순수 납입 원금", "누적 적립 이자", "장기유지 가산보너스"], "금액": [t_prin, t_int, t_bonus]}), values="금액", names="항목", hole=0.4, color_discrete_sequence=px.colors.sequential.Teal)
+color_map = {
+    "순수 납입 원금": "#1F4E79",
+    "누적 적립 이자": "#548235",
+    "장기유지 가산보너스": "#FFC000"
+}
+fig_pie = px.pie(pd.DataFrame({"항목": ["순수 납입 원금", "누적 적립 이자", "장기유지 가산보너스"], "금액": [t_prin, t_int, t_bonus]}), values="금액", names="항목", hole=0.4, color="항목", color_discrete_map=color_map)
 fig_pie.update_traces(textinfo='label+percent', textposition='outside')
 st.plotly_chart(fig_pie, use_container_width=True)
 
