@@ -115,8 +115,17 @@ st.plotly_chart(fig_pie, use_container_width=True)
 
 st.markdown("---")
 st.subheader("2. 연금 개시 연령별 수령액 비교")
-compare_data = [{"개시 연령": f"{age}세", "월 수령액 (만원)": calculate_details(current_age, gender, monthly_pay, pay_years, age)[4]/12} for age in range(compare_range[0], compare_range[1] + 1)]
-st.plotly_chart(px.bar(pd.DataFrame(compare_data), x="개시 연령", y="월 수령액 (만원)", text_auto='.0f', color="월 수령액 (만원)", color_continuous_scale="Blues"), use_container_width=True)
+compare_data = []
+for age in range(compare_range[0], compare_range[1] + 1):
+    ann_pension = calculate_details(current_age, gender, monthly_pay, pay_years, age)[4]
+    compare_data.append({
+        "개시 연령": f"{age}세",
+        "월 수령액 (만원)": ann_pension / 12,
+        "차트 텍스트": f"월 {ann_pension/12:,.0f}만<br><br>연 {ann_pension:,.0f}만"
+    })
+fig_bar = px.bar(pd.DataFrame(compare_data), x="개시 연령", y="월 수령액 (만원)", text="차트 텍스트", color="월 수령액 (만원)", color_continuous_scale="Blues")
+fig_bar.update_traces(textposition='inside')
+st.plotly_chart(fig_bar, use_container_width=True)
 
 st.markdown("---")
 st.subheader(f"3. 개시 연령별 연금준비금 총액 및 납입원금 ({target_r_age}세 개시 기준)")
