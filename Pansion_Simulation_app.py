@@ -155,5 +155,6 @@ roi_data = [{"구간": "기대수명 하단", "수익률": (max(0, ann_pen * ((m
             {"구간": "기대수명 중단", "수익률": (max(0, ann_pen * (mid_life - target_r_age + 1) - t_prin) / t_prin) * 100},
             {"구간": "기대수명 상단", "수익률": (max(0, ann_pen * ((mid_life+10) - target_r_age + 1) - t_prin) / t_prin) * 100}]
 st.plotly_chart(px.bar(pd.DataFrame(roi_data), x="구간", y="수익률", text_auto='.1f', color="수익률", color_continuous_scale="Viridis"), use_container_width=True)
-st.success(f"고객님의 예상 최대 기대여명은 **{mid_life+10}세**이며, 이때까지 연금을 수령하실 경우 원금 대비 최대 **{roi_data[2]['수익률']:.1f}%**의 수익을 기대할 수 있습니다.")
+st.success(f"고객님의 예상 최대 기대여명은 **{mid_life+10}세**이며, 이때까지 연금을 수령하실 경우 원금 대비 최대 {roi_data[2]['수익률']:.1f}%의 수익을 기대할 수 있습니다.")
+
 
