@@ -130,7 +130,7 @@ fig_pie.update_traces(textinfo='label+percent', textposition='outside')
 st.plotly_chart(fig_pie, use_container_width=True)
 
 st.markdown("---")
-st.subheader("2. 연금 개시 연령별 수령액 비교")
+st.subheader("2. 연금 개시 연령별 수령액 월별.년별 비교")
 compare_data = []
 for age in range(compare_range[0], compare_range[1] + 1):
     ann_pension = calculate_details(current_age, gender, monthly_pay, pay_years, age)[4]
@@ -142,8 +142,8 @@ fig_bar = px.bar(pd.DataFrame(compare_data), x="개시 연령", y="월 수령액
 st.plotly_chart(fig_bar, use_container_width=True)
 
 st.markdown("---")
-st.subheader(f"3. 개시 연령별 연금준비금 총액 및 납입원금 ({target_r_age}세 개시 기준)")
-df_cum = pd.DataFrame([{"생존 나이": s_age, "납입 원금": t_prin, "연금 누적 수익": max(0, (ann_pen * (s_age - target_r_age + 1)) - t_prin)} for s_age in range(80, 131)])
+st.subheader(f"3. 기대수명 별 납입액 + 추가연금 수령 누적 총액 ({target_r_age}세 개시 기준)")
+df_cum = pd.DataFrame([{"생존 나이": s_age, "납입 원금": t_prin, "연금 누적 수익": max(0, (ann_pen * (s_age - target_r_age + 1)) - t_prin)} for s_age in range(80, 121)])
 st.plotly_chart(px.area(df_cum, x="생존 나이", y=["납입 원금", "연금 누적 수익"], color_discrete_map={"납입 원금": "#E74C3C", "연금 누적 수익": "#2E86C1"}), use_container_width=True)
 
 # 4. 기대여명 섹션 복구
@@ -156,3 +156,4 @@ roi_data = [{"구간": "기대수명 하단", "수익률": (max(0, ann_pen * ((m
             {"구간": "기대수명 상단", "수익률": (max(0, ann_pen * ((mid_life+10) - target_r_age + 1) - t_prin) / t_prin) * 100}]
 st.plotly_chart(px.bar(pd.DataFrame(roi_data), x="구간", y="수익률", text_auto='.1f', color="수익률", color_continuous_scale="Viridis"), use_container_width=True)
 st.success(f"고객님의 예상 최대 기대여명은 **{mid_life+10}세**이며, 이때까지 연금을 수령하실 경우 원금 대비 최대 **{roi_data[2]['수익률']:.1f}%**의 수익을 기대할 수 있습니다.")
+
