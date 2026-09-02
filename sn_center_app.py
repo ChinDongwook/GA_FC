@@ -789,7 +789,7 @@ def main_app():
         # 로그인 시 6개의 추가 카드 메뉴 확장
         if is_logged_in:
             cards.extend([
-                ("📂", "모든 보험사 전산설치", "모든 보험사 전살설치 및 설계요청 각보험사 정보. 카드납. 소식지 .", "https://wasset-info.com/insurance"),
+                ("📂", "모든 보험사 전산설치", "모든 보험사 전살설치 및 설계요청 각보험사 정보. 카드납. 소식지 .", "https://gaworld.kr/wasset-infra"),
                 ("📑", "영업 자료", "손생보 소식지, 시책, 카드뉴스, 상품비교, 가이드북, 질병통계, 각종 금융 자료", "https://drive.google.com/drive/folders/1Oq1MjqWxCqhEt9808ejD6ult0H-ng3Ts"),
                 ("👥", "WASEET_AGIT 집단지성", "더블유에셋 집단지성 Q&A, 설계안공유, 등 커뮤니티입니다.", "https://w123.agit.io/home"),
                 ("🎓", "더블유에셋 와인프로", "더블유에셋 구전산 와인프로 인트라넷.", "https://wain.pro/main/login.php"),
